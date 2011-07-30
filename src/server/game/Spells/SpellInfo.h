@@ -162,7 +162,7 @@ public:
     flag96    SpellClassMask;
 
     SpellEffectInfo() {}
-    SpellEffectInfo(SpellEntry const* spellEntry, SpellInfo const* spellInfo, uint8 effIndex);
+    SpellEffectInfo(SpellEffectEntry const* spellEntry, SpellInfo const* spellInfo, uint8 effIndex);
 
     bool IsEffect() const;
     bool IsEffect(SpellEffects effectName) const;
@@ -190,6 +190,40 @@ private:
 
     static bool Init;
     static SpellEffectTargetTypes RequiredTargetType[TOTAL_SPELL_EFFECTS];
+};
+
+class SpellAuraOptionsInfo
+{
+};
+
+class SpellAuraRestrictionsInfo
+{
+};
+
+SpellCastingRequirementsInfo
+
+SpellCategoriesInfo
+
+SpellClassOptionsInfo
+
+SpellCooldownsInfo
+
+SpellEquippedItemsInfo
+
+SpellInterruptsInfo
+
+SpellLevelsInfo
+
+SpellPowerInfo
+
+SpellReagentsInfo
+
+SpellTargetRestrictionsInfo
+
+SpellTotemsInfo
+
+class SpellClassInfo
+{
 };
 
 class SpellInfo
