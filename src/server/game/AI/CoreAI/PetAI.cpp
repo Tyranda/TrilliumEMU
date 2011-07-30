@@ -137,7 +137,7 @@ void PetAI::UpdateAI(const uint32 diff)
             if (!spellID)
                 continue;
 
-            SpellInfo const *spellInfo = sSpellStore.LookupEntry(spellID);
+            SpellInfo const *spellInfo = sSpellMgr->GetSpellInfo(spellID);
             if (!spellInfo)
                 continue;
 

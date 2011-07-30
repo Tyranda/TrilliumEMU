@@ -293,7 +293,8 @@ public:
     char* Rank[16];
     uint32 MaxTargetLevel;
     uint32 MaxAffectedTargets;
-    SpellClassOptionsEntry const* SpellFamilyName, SpellFamilyFlags;
+    uint32 SpellFamilyName;
+    flag96 SpellFamilyFlags;
     uint32 DmgClass;
     uint32 PreventionType;
     int32  AreaGroupId;
@@ -301,7 +302,7 @@ public:
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
     SpellChainNode const* ChainEntry;
 
-    SpellInfo(SpellEntry const* spellEntry, SpellClassOptionsEntry const* spellClass);
+    SpellInfo(SpellEntry const* spellEntry);
 
     bool HasEffect(SpellEffects effect) const;
     bool HasAura(AuraType aura) const;
