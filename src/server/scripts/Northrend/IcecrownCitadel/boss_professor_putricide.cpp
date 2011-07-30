@@ -723,7 +723,7 @@ class spell_putricide_gaseous_bloat : public SpellScriptLoader
                 Unit* target = GetTarget();
                 if (Unit* caster = GetCaster())
                 {
-                    target->RemoveAuraFromStack(GetSpellProto()->Id, GetCasterGUID());
+                    target->RemoveAuraFromStack(GetSpellInfo()->Id, GetCasterGUID());
                     if (!target->HasAura(GetId())&& caster->GetTypeId() == TYPEID_UNIT)
                         caster->ToCreature()->DespawnOrUnsummon();
                 }
@@ -900,7 +900,7 @@ class spell_putricide_slime_puddle : public SpellScriptLoader
                     if (Aura* size = caster->GetAura(70347))
                         radiusMod += size->GetStackAmount();
 
-                    uint32 triggerSpellId = GetSpellProto()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
+                    uint32 triggerSpellId = GetSpellInfo()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
                     caster->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, radiusMod * 100, caster, true);
                 }
             }
@@ -1003,7 +1003,7 @@ class spell_putricide_ooze_summon : public SpellScriptLoader
                 PreventDefaultAction();
                 if (Unit* caster = GetCaster())
                 {
-                    uint32 triggerSpellId = GetSpellProto()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
+                    uint32 triggerSpellId = GetSpellInfo()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
                     float x, y, z;
                     GetTarget()->GetPosition(x, y, z);
                     z = GetTarget()->GetMap()->GetHeight(x, y, z, true, 25.0f);
@@ -1221,7 +1221,7 @@ class spell_putricide_mutated_plague : public SpellScriptLoader
                 if (!caster)
                     return;
 
-                uint32 triggerSpell = GetSpellProto()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
+                uint32 triggerSpell = GetSpellInfo()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
                 SpellInfo const* spell = sSpellStore.LookupEntry(triggerSpell);
                 spell = sSpellMgr->GetSpellForDifficultyFromSpell(spell, caster);
 
@@ -1238,7 +1238,7 @@ class spell_putricide_mutated_plague : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                uint32 healSpell = uint32(SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), 0));
+                uint32 healSpell = uint32(SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), 0));
                 GetTarget()->CastSpell(GetTarget(), healSpell, true, NULL, NULL, GetCasterGUID());
             }
 

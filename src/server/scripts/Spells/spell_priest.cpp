@@ -57,7 +57,7 @@ class spell_pri_guardian_spirit : public SpellScriptLoader
 
             bool Load()
             {
-                healPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1);
+                healPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1);
                 return true;
             }
 

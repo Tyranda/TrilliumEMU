@@ -240,7 +240,7 @@ public:
             Unit* target = GetTarget();
             if (AuraEffect * talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_MAGE_FROST_WARDING_R1, EFFECT_0))
             {
-                int32 chance = SpellMgr::CalculateSpellEffectAmount(talentAurEff->GetSpellProto(), EFFECT_1);
+                int32 chance = SpellMgr::CalculateSpellEffectAmount(talentAurEff->GetSpellInfo(), EFFECT_1);
 
                 if (roll_chance_i(chance))
                 {

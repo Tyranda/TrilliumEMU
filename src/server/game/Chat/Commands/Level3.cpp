@@ -2410,7 +2410,7 @@ bool ChatHandler::HandleListAurasCommand (const char * /*args*/)
 
         AuraApplication const* aurApp = itr->second;
         Aura const* aura = aurApp->GetBase();
-        char const* name = aura->GetSpellProto()->SpellName[GetSessionDbcLocale()];
+        char const* name = aura->GetSpellInfo()->SpellName[GetSessionDbcLocale()];
 
         std::ostringstream ss_name;
         ss_name << "|cffffffff|Hspell:" << aura->GetId() << "|h[" << name << "]|h|r";

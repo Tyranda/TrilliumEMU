@@ -23,10 +23,10 @@
 #include "DataStructure.h"
 #include "DataStorage.h"
 
-int32 SpellEntry::CalculateSimpleValue(uint32 eff) const
+int32 SpellEntry::GetEffectBasePoints(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->CalculateSimpleValue();
+        return effectEntry->GetEffectBasePoints();
     return 0;
 }
 
@@ -100,17 +100,17 @@ uint32 SpellEntry::GetEffectRadiusIndex(uint32 eff) const
     return NULL;
 }
 
-uint32 SpellEntry::GetDmgMultiplier(uint32 eff) const
+uint32 SpellEntry::GetEffectDamageMultiplier(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetDmgMultiplier();
+        return effectEntry->GetEffectDamageMultiplier();
     return NULL;
 }
 
-uint32 SpellEntry::GetEffectMultipleValue(uint32 eff) const
+uint32 SpellEntry::GetEffectValueMultiplier(uint32 eff) const
 {
     if (SpellEffectEntry const* effectEntry = GetSpellEffectEntry(Id, eff))
-        return effectEntry->GetEffectMultipleValue();
+        return effectEntry->GetEffectValueMultiplier();
     return NULL;
 }
 

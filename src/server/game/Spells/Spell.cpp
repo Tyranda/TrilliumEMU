@@ -2875,7 +2875,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
     m_spellState = SPELL_STATE_PREPARING;
 
     if (triggeredByAura)
-        m_triggeredByAuraSpell  = triggeredByAura->GetSpellProto();
+        m_triggeredByAuraSpell  = triggeredByAura->GetSpellInfo();
 
     // create and add update event for this spell
     SpellEvent* Event = new SpellEvent(this);
@@ -5529,11 +5529,11 @@ SpellCastResult Spell::CheckCasterAuras() const
             for (Unit::AuraApplicationMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
             {
                 Aura const* aura = itr->second->GetBase();
-                if (GetAllSpellMechanicMask(aura->GetSpellProto()) & mechanic_immune)
+                if (GetAllSpellMechanicMask(aura->GetSpellInfo()) & mechanic_immune)
                     continue;
-                if (GetSpellSchoolMask(aura->GetSpellProto()) & school_immune)
+                if (GetSpellSchoolMask(aura->GetSpellInfo()) & school_immune)
                     continue;
-                if ((1<<(aura->GetSpellProto()->GetDispel())) & dispel_immune)
+                if ((1<<(aura->GetSpellInfo()->GetDispel())) & dispel_immune)
                     continue;
 
                 //Make a second check for spell failed so the right SPELL_FAILED message is returned.
@@ -7143,7 +7143,7 @@ void Spell::PrepareTriggersExecutedOnHit()
     {
         if (!(*i)->IsAffectedOnSpell(m_spellInfo))
             continue;
-        SpellInfo const *auraSpellInfo = (*i)->GetSpellProto();
+        SpellInfo const *auraSpellInfo = (*i)->GetSpellInfo();
         uint32 auraSpellIdx = (*i)->GetEffIndex();
         if (SpellInfo const *spellInfo = sSpellStore.LookupEntry(auraSpellInfo->GetEffectTriggerSpell(auraSpellIdx)))
         {

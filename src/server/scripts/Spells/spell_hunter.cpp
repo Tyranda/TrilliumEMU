@@ -81,7 +81,7 @@ public:
                     continue;
 
                 // Search only Serpent Sting, Viper Sting, Scorpid Sting auras
-                flag96 familyFlag = aura->GetSpellProto()->GetSpellClassOptions()->SpellFamilyFlags;
+                flag96 familyFlag = aura->GetSpellInfo()->GetSpellClassOptions()->SpellFamilyFlags;
                 if (!(familyFlag[1] & 0x00000080 || familyFlag[0] & 0x0000C000))
                     continue;
                 if (AuraEffect const* aurEff = aura->GetEffect(0))
@@ -91,7 +91,7 @@ public:
                     {
                         int32 TickCount = aurEff->GetTotalTicks();
                         spellId = HUNTER_SPELL_CHIMERA_SHOT_SERPENT;
-                        basePoint = caster->SpellDamageBonus(unitTarget, aura->GetSpellProto(), aurEff->GetAmount(), DOT, aura->GetStackAmount());
+                        basePoint = caster->SpellDamageBonus(unitTarget, aura->GetSpellInfo(), aurEff->GetAmount(), DOT, aura->GetStackAmount());
                         ApplyPctN(basePoint, TickCount * 40);
                     }
                     // Viper Sting - Instantly restores mana to you equal to 60% of the total amount drained by your Viper Sting.
@@ -389,7 +389,7 @@ public:
             {
                 int32 baseAmount = aurEff->GetBaseAmount();
                 int32 amount = pPlayerTarget->isMoving() ?
-                target->CalculateSpellDamage(target, GetSpellProto(), aurEff->GetEffIndex(), &baseAmount) :
+                target->CalculateSpellDamage(target, GetSpellInfo(), aurEff->GetEffIndex(), &baseAmount) :
                 aurEff->GetAmount() - 1;
                 aurEff->SetAmount(amount);
             }

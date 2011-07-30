@@ -59,7 +59,7 @@ class spell_dru_glyph_of_starfire : public SpellScriptLoader
                         Aura* aura = aurEff->GetBase();
 
                         uint32 countMin = aura->GetMaxDuration();
-                        uint32 countMax = GetSpellMaxDuration(aura->GetSpellProto()) + 9000;
+                        uint32 countMax = GetSpellMaxDuration(aura->GetSpellInfo()) + 9000;
                         if (caster->HasAura(DRUID_INCREASED_MOONFIRE_DURATION))
                             countMax += 3000;
                         if (caster->HasAura(DRUID_NATURES_SPLENDOR))
@@ -99,7 +99,7 @@ class spell_dru_moonkin_form_passive : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 
@@ -143,7 +143,7 @@ class spell_dru_primal_tenacity : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1, GetCaster());
                 return true;
             }
 
@@ -187,7 +187,7 @@ class spell_dru_savage_defense : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 

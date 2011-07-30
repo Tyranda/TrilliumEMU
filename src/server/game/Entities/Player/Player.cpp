@@ -3323,7 +3323,7 @@ void Player::SendInitialSpells()
         data << uint32(itr->first);
 
         data << uint16(itr->second.itemid);                 // cast item id
-        data << uint16(sEntry->GetCategory());                   // spell category
+        data << uint16(sEntry->Category);                   // spell category
 
         // send infinity cooldown in special format
         if (itr->second.end >= infTime)
@@ -7964,7 +7964,7 @@ void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackTy
     float mod = 100.0f;
     AuraEffectList const& auraDamagePctList = GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
     for (AuraEffectList::const_iterator itr = auraDamagePctList.begin(); itr != auraDamagePctList.end(); ++itr)
-        if ((apply && item->IsFitToSpellRequirements((*itr)->GetSpellProto())) || HasItemFitToSpellRequirements((*itr)->GetSpellProto(), item))
+        if ((apply && item->IsFitToSpellRequirements((*itr)->GetSpellInfo())) || HasItemFitToSpellRequirements((*itr)->GetSpellInfo(), item))
             mod += (*itr)->GetAmount();
 
     SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT, mod/100.0f);
@@ -7973,7 +7973,7 @@ void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackTy
 void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attackType, AuraEffect const* aura, bool apply)
 {
     // generic not weapon specific case processes in aura code
-    if (aura->GetSpellProto()->GetEquippedItemClass() == -1)
+    if (aura->GetSpellInfo()->GetEquippedItemClass() == -1)
         return;
 
     BaseModGroup mod = BASEMOD_END;
@@ -7985,7 +7985,7 @@ void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attac
         default: return;
     }
 
-    if (!item->IsBroken()&&item->IsFitToSpellRequirements(aura->GetSpellProto()))
+    if (!item->IsBroken()&&item->IsFitToSpellRequirements(aura->GetSpellInfo()))
         HandleBaseModValue(mod, FLAT_MOD, float (aura->GetAmount()), apply);
 }
 
@@ -8000,7 +8000,7 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType att
         return;
 
     // generic not weapon specific case processes in aura code
-    if (aura->GetSpellProto()->GetEquippedItemClass() == -1)
+    if (aura->GetSpellInfo()->GetEquippedItemClass() == -1)
         return;
 
     UnitMods unitMod = UNIT_MOD_END;
@@ -8019,7 +8019,7 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType att
         default: return;
     }
 
-    if (item->IsFitToSpellRequirements(aura->GetSpellProto()))
+    if (item->IsFitToSpellRequirements(aura->GetSpellInfo()))
     {
         HandleStatModifier(unitMod, unitModType, float(aura->GetAmount()), apply);
         ApplyModUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS, aura->GetAmount(), apply);
@@ -19652,7 +19652,7 @@ void Player::RestoreSpellMods(Spell* spell, uint32 ownerAuraId, Aura* aura)
                 continue;
 
             // Restore only specific owner aura mods
-            if (ownerAuraId && (ownerAuraId != mod->ownerAura->GetSpellProto()->Id))
+            if (ownerAuraId && (ownerAuraId != mod->ownerAura->GetSpellInfo()->Id))
                 continue;
 
             if (aura && mod->ownerAura != aura)
@@ -22127,7 +22127,7 @@ void Player::RemoveItemDependentAurasAndCasts(Item* pItem)
         Aura * aura = itr->second;
 
         // skip passive (passive item dependent spells work in another way) and not self applied auras
-        SpellInfo const* spellInfo = aura->GetSpellProto();
+        SpellInfo const* spellInfo = aura->GetSpellInfo();
         if (aura->IsPassive() ||  aura->GetCasterGUID() != GetGUID())
         {
             ++itr;
@@ -22161,7 +22161,7 @@ uint32 Player::GetResurrectionSpellId()
     for (AuraEffectList::const_iterator itr = dummyAuras.begin(); itr != dummyAuras.end(); ++itr)
     {
         // Soulstone Resurrection                           // prio: 3 (max, non death persistent)
-        if (prio < 2 && (*itr)->GetSpellProto()->SpellVisual[0] == 99 && (*itr)->GetSpellProto()->SpellIconID == 92)
+        if (prio < 2 && (*itr)->GetSpellInfo()->SpellVisual[0] == 99 && (*itr)->GetSpellInfo()->SpellIconID == 92)
         {
             switch ((*itr)->GetId())
             {
@@ -22387,7 +22387,7 @@ void Player::UpdateAreaDependentAuras(uint32 newArea)
     for (AuraMap::iterator iter = m_ownedAuras.begin(); iter != m_ownedAuras.end();)
     {
         // use m_zoneUpdateId for speed: UpdateArea called from UpdateZone or instead UpdateZone in both cases m_zoneUpdateId up-to-date
-        if (sSpellMgr->GetSpellAllowedInLocationError(iter->second->GetSpellProto(), GetMapId(), m_zoneUpdateId, newArea, this) != SPELL_CAST_OK)
+        if (sSpellMgr->GetSpellAllowedInLocationError(iter->second->GetSpellInfo(), GetMapId(), m_zoneUpdateId, newArea, this) != SPELL_CAST_OK)
             RemoveOwnedAura(iter);
         else
             ++iter;

@@ -56,7 +56,7 @@ class spell_dk_anti_magic_shell_raid : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 
@@ -97,8 +97,8 @@ class spell_dk_anti_magic_shell_self : public SpellScriptLoader
             uint32 absorbPct, hpPct;
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
-                hpPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_1, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
+                hpPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_1, GetCaster());
                 return true;
             }
 
@@ -155,7 +155,7 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 
@@ -418,7 +418,7 @@ class spell_dk_spell_deflection : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 
@@ -521,7 +521,7 @@ class spell_dk_will_of_the_necropolis : public SpellScriptLoader
 
             bool Load()
             {
-                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellProto(), EFFECT_0, GetCaster());
+                absorbPct = SpellMgr::CalculateSpellEffectAmount(GetSpellInfo(), EFFECT_0, GetCaster());
                 return true;
             }
 
@@ -534,7 +534,7 @@ class spell_dk_will_of_the_necropolis : public SpellScriptLoader
             void Absorb(AuraEffect * /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
             {
                 // min pct of hp is stored in effect 0 of talent spell
-                uint32 rank = sSpellMgr->GetSpellRank(GetSpellProto()->Id);
+                uint32 rank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
                 SpellInfo const* talentProto = sSpellStore.LookupEntry(sSpellMgr->GetSpellWithRank(DK_SPELL_WILL_OF_THE_NECROPOLIS_TALENT_R1, rank));
 
                 int32 remainingHp = int32(GetTarget()->GetHealth() - dmgInfo.GetDamage());
@@ -630,7 +630,7 @@ public:
             if (target->HasAura(DK_SPELL_UNHOLY_PRESENCE) && !target->HasAura(DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED))
             {
                 // Not listed as any effect, only base points set in dbc
-                int32 basePoints0 = SpellMgr::CalculateSpellEffectAmount(aurEff->GetSpellProto(), 1);
+                int32 basePoints0 = SpellMgr::CalculateSpellEffectAmount(aurEff->GetSpellInfo(), 1);
                 target->CastCustomSpell(target, DK_SPELL_IMPROVED_UNHOLY_PRESENCE_TRIGGERED, &basePoints0 , &basePoints0, &basePoints0, true, 0, aurEff);
             }
         }

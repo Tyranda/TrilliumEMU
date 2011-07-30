@@ -1657,12 +1657,12 @@ struct SpellEffectEntry
 {
     //uint32    Id;                                           // 0         m_ID
     uint32    Effect;                                       // 1         m_effect
-    float     EffectMultipleValue;                          // 2         m_effectAmplitude
+    float     EffectValueMultiplier;                        // 2         m_effectAmplitude
     uint32    EffectApplyAuraName;                          // 3         m_effectAura
     uint32    EffectAmplitude;                              // 4         m_effectAuraPeriod
     int32     EffectBasePoints;                             // 5         m_effectBasePoints (don't must be used in spell/auras explicitly, must be used cached Spell::m_currentBasePoints)
     //float   unk_320_4;                                    // 6         3.2.0
-    float     DmgMultiplier;                                // 7         m_effectChainAmplitude
+    float     EffectDamageMultiplier;                       // 7         m_effectChainAmplitude
     uint32    EffectChainTarget;                            // 8         m_effectChainTargets
     int32     EffectDieSides;                               // 9         m_effectDieSides
     uint32    EffectItemType;                               // 10        m_effectItemType
@@ -1682,7 +1682,7 @@ struct SpellEffectEntry
     //uint32  Unk0                                          // 24        4.2.0
 
     // helpers
-    int32 CalculateSimpleValue() const { return EffectBasePoints; }
+    int32  GetEffectBasePoints() const { return EffectBasePoints; }
     uint32 GetEffectItemType() const { return EffectItemType; }
     uint32 GetEffectTriggerSpell() const { return EffectTriggerSpell; }
     uint32 GetEffectAmplitude() const { return EffectAmplitude; }
@@ -1693,8 +1693,8 @@ struct SpellEffectEntry
     uint32 GetEffectPointsPerComboPoint() const { return EffectPointsPerComboPoint; }
     uint32 GetEffectRealPointsPerLevel() const { return EffectRealPointsPerLevel; }
     uint32 GetEffectRadiusIndex() const { return EffectRadiusIndex; }
-    uint32 GetDmgMultiplier() const { return DmgMultiplier; }
-    uint32 GetEffectMultipleValue() const { return EffectMultipleValue; }
+    uint32 GetEffectDamageMultiplier() const { return EffectDamageMultiplier; }
+    uint32 GetEffectValueMultiplier() const { return EffectValueMultiplier; }
 };
 
 // SpellEquippedItems.dbc
@@ -1859,7 +1859,7 @@ struct SpellEntry
     uint32 SpellTotemsId;                                   // 46       SpellTotems.dbc
     //uint32 ResearchProject;                               // 47       ResearchProject.dbc
 
-    int32 CalculateSimpleValue(uint32 eff) const;
+    int32 GetEffectBasePoints(uint32 eff) const;
     //SpellEffectEntry
     uint32 GetEffectItemType(uint32 eff) const;
     uint32 GetEffectTriggerSpell(uint32 eff) const;
@@ -1871,8 +1871,8 @@ struct SpellEntry
     uint32 GetEffectPointsPerComboPoint(uint32 eff) const;
     uint32 GetEffectRealPointsPerLevel(uint32 eff) const;
     uint32 GetEffectRadiusIndex(uint32 eff) const;
-    uint32 GetDmgMultiplier(uint32 eff) const;
-    uint32 GetEffectMultipleValue(uint32 eff) const;
+    uint32 GetEffectDamageMultiplier(uint32 eff) const;
+    uint32 GetEffectValueMultiplier(uint32 eff) const;
     uint32 const* GetEffectSpellClassMask(uint32 eff) const;
 
     // struct access functions

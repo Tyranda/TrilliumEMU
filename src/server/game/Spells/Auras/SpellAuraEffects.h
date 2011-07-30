@@ -317,11 +317,11 @@ namespace Trillium
                 // Wards
                 if ((spellProtoA->SpellFamilyName == SPELLFAMILY_MAGE) ||
                     (spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK))
-                    if (spellProtoA->GetCategory() == 56)
+                    if (spellProtoA->Category == 56)
                         return true;
                 if ((spellProtoB->SpellFamilyName == SPELLFAMILY_MAGE) ||
                     (spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK))
-                    if (spellProtoB->GetCategory() == 56)
+                    if (spellProtoB->Category == 56)
                         return false;
 
                 // Sacred Shield
@@ -343,9 +343,9 @@ namespace Trillium
                     return false;
 
                 // Ice Barrier
-                if (spellProtoA->GetCategory() == 471)
+                if (spellProtoA->Category == 471)
                     return true;
-                if (spellProtoB->GetCategory() == 471)
+                if (spellProtoB->Category == 471)
                     return false;
 
                 // Sacrifice

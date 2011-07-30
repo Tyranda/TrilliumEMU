@@ -17,7 +17,7 @@
 
 #include "SpellInfo.h"
 #include "SpellMgr.h"
-#include "DbcStores.h"
+#include "DataStorage.h"
 
 SpellImplicitTargetInfo::SpellImplicitTargetInfo(uint32 target)
 {
@@ -224,30 +224,30 @@ bool SpellImplicitTargetInfo::Init = SpellImplicitTargetInfo::InitStaticData();
 bool SpellImplicitTargetInfo::Area[TOTAL_SPELL_TARGETS];
 SpellSelectTargetTypes SpellImplicitTargetInfo::Type[TOTAL_SPELL_TARGETS];
 
-SpellEffectInfo::SpellEffectInfo(SpellEffectEntry const* spellEntry, SpellInfo const* spellInfo, uint8 effIndex)
+SpellEffectInfo::SpellEffectInfo(SpellEntry const* spellEntry, SpellInfo const* spellInfo, uint8 effIndex)
 {
     _spellInfo = spellInfo;
     _effIndex = effIndex;
-    Effect = spellEntry->Effect[effIndex];
-    ApplyAuraName = spellEntry->EffectApplyAuraName[effIndex];
-    Amplitude = spellEntry->EffectAmplitude[effIndex];
-    DieSides = spellEntry->EffectDieSides[effIndex];
-    RealPointsPerLevel = spellEntry->EffectRealPointsPerLevel[effIndex];
-    BasePoints = spellEntry->EffectBasePoints[effIndex];
-    PointsPerComboPoint = spellEntry->EffectPointsPerComboPoint[effIndex];
-    ValueMultiplier = spellEntry->EffectValueMultiplier[effIndex];
-    DamageMultiplier = spellEntry->EffectDamageMultiplier[effIndex];
-    BonusMultiplier = spellEntry->EffectBonusMultiplier[effIndex];
-    MiscValue = spellEntry->EffectMiscValue[effIndex];
-    MiscValueB = spellEntry->EffectMiscValueB[effIndex];
-    Mechanic = Mechanics(spellEntry->EffectMechanic[effIndex]);
-    TargetA = SpellImplicitTargetInfo(spellEntry->EffectImplicitTargetA[effIndex]);
-    TargetB = SpellImplicitTargetInfo(spellEntry->EffectImplicitTargetB[effIndex]);
-    RadiusEntry = spellEntry->EffectRadiusIndex[effIndex] ? sSpellRadiusStore.LookupEntry(spellEntry->EffectRadiusIndex[effIndex]) : NULL;
-    ChainTarget = spellEntry->EffectChainTarget[effIndex];
-    ItemType = spellEntry->EffectItemType[effIndex];
-    TriggerSpell = spellEntry->EffectTriggerSpell[effIndex];
-    SpellClassMask = spellEntry->EffectSpellClassMask[effIndex];
+    Effect = spellEntry->GetSpellEffectIdByIndex(effIndex);
+    ApplyAuraName = spellEntry->GetEffectApplyAuraNameByIndex(effIndex);
+    Amplitude = spellEntry->GetEffectAmplitude(effIndex);
+    DieSides = spellEntry->GetEffectDieSides(effIndex);
+    RealPointsPerLevel = spellEntry->GetEffectRealPointsPerLevel(effIndex);
+    BasePoints = spellEntry->GetEffectBasePoints(effIndex);
+    PointsPerComboPoint = spellEntry->GetEffectPointsPerComboPoint(effIndex);
+    ValueMultiplier = spellEntry->GetEffectValueMultiplier(effIndex);
+    DamageMultiplier = spellEntry->GetEffectDamageMultiplier(effIndex);
+    BonusMultiplier = spellEntry->GetEffectBonusMultiplier(effIndex);
+    MiscValue = spellEntry->GetEffectMiscValue(effIndex);
+    MiscValueB = spellEntry->GetEffectMiscValueB(effIndex);
+    Mechanic = Mechanics(spellEntry->GetEffectMechanic(effIndex));
+    TargetA = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetAByIndex(effIndex));
+    TargetB = SpellImplicitTargetInfo(spellEntry->GetEffectImplicitTargetBByIndex(effIndex));
+    RadiusEntry = spellEntry->GetEffectRadiusIndex(effIndex) ? sSpellRadiusStore.LookupEntry(spellEntry->GetEffectRadiusIndex(effIndex)) : NULL;
+    ChainTarget = spellEntry->GetEffectChainTarget(effIndex);
+    ItemType = spellEntry->GetEffectItemType(effIndex);
+    TriggerSpell = spellEntry->GetEffectTriggerSpell(effIndex);
+    SpellClassMask = spellEntry->GetEffectSpellClassMask(effIndex);
 }
 
 bool SpellEffectInfo::IsEffect() const
@@ -555,13 +555,13 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
         SpellName[i] = spellEntry->SpellName[i];
     for (uint8 i = 0; i < 16; ++i)
         Rank[i] = spellEntry->Rank[i];
-    MaxTargetLevel = spellEntry->MaxTargetLevel;
-    MaxAffectedTargets = spellEntry->MaxAffectedTargets;
-    SpellFamilyName = spellClass->SpellFamilyName ? sSpellClassOptionsStore.LookupEntry(spellClass->SpellFamilyName) : NULL;
-    SpellFamilyFlags = spellClass->SpellFamilyFlags ? sSpellClassOptionsStore.LookupEntry(spellClass->SpellFamilyFlags) : NULL;
-    DmgClass = spellEntry->DmgClass;
-    PreventionType = spellEntry->PreventionType;
-    AreaGroupId  = spellEntry->AreaGroupId;
+    MaxTargetLevel = spellEntry->GetMaxTargetLevel;
+    MaxAffectedTargets = spellEntry->GetMaxAffectedTargets();
+    SpellFamilyName = spellEntry->GetSpellFamilyName();
+    SpellFamilyFlags = spellEntry->GetSpellClassOptions()->SpellFamilyFlags;
+    DmgClass = spellEntry->GetDmgClass();
+    PreventionType = spellEntry->GetPreventionType();
+    AreaGroupId  = spellEntry->GetAreaGroupId();
     SchoolMask = spellEntry->SchoolMask;
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         Effects[i] = SpellEffectInfo(spellEntry, this, i);
