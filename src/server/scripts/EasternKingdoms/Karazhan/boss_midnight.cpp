@@ -99,7 +99,7 @@ public:
 
         void UpdateAI(const uint32 diff);
 
-        void SpellHit(Unit* /*source*/, const SpellEntry *spell)
+        void SpellHit(Unit* /*source*/, const SpellInfo *spell)
         {
             if (spell->GetMechanic() == MECHANIC_DISARM)
                 DoScriptText(SAY_DISARMED, me);

@@ -1644,7 +1644,7 @@ void Creature::DespawnOrUnsummon(uint32 msTimeToDespawn /*= 0*/)
         ForcedDespawn(msTimeToDespawn);
 }
 
-bool Creature::IsImmunedToSpell(SpellEntry const* spellInfo)
+bool Creature::IsImmunedToSpell(SpellInfo const* spellInfo)
 {
     if (!spellInfo)
         return false;
@@ -1655,7 +1655,7 @@ bool Creature::IsImmunedToSpell(SpellEntry const* spellInfo)
     return Unit::IsImmunedToSpell(spellInfo);
 }
 
-bool Creature::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) const
+bool Creature::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) const
 {
     if (GetCreatureInfo()->MechanicImmuneMask & (1 << (spellInfo->GetSpellEffectMechanic(index) - 1)))
         return true;
@@ -1666,7 +1666,7 @@ bool Creature::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index)
     return Unit::IsImmunedToSpellEffect(spellInfo, index);
 }
 
-SpellEntry const *Creature::reachWithSpellAttack(Unit *pVictim)
+SpellInfo const *Creature::reachWithSpellAttack(Unit *pVictim)
 {
     if (!pVictim)
         return NULL;
@@ -1675,7 +1675,7 @@ SpellEntry const *Creature::reachWithSpellAttack(Unit *pVictim)
     {
         if (!m_spells[i])
             continue;
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(m_spells[i]);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(m_spells[i]);
         if (!spellInfo)
         {
             sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
@@ -1703,8 +1703,6 @@ SpellEntry const *Creature::reachWithSpellAttack(Unit *pVictim)
         float range = GetSpellMaxRangeForHostile(srange);
         float minrange = GetSpellMinRangeForHostile(srange);
         float dist = GetDistance(pVictim);
-        //if (!isInFront(pVictim, range) && spellInfo->AttributesEx)
-        //    continue;
         if (dist > range || dist < minrange)
             continue;
         if (spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED))
@@ -1716,7 +1714,7 @@ SpellEntry const *Creature::reachWithSpellAttack(Unit *pVictim)
     return NULL;
 }
 
-SpellEntry const *Creature::reachWithSpellCure(Unit *pVictim)
+SpellInfo const *Creature::reachWithSpellCure(Unit *pVictim)
 {
     if (!pVictim)
         return NULL;
@@ -1725,7 +1723,7 @@ SpellEntry const *Creature::reachWithSpellCure(Unit *pVictim)
     {
         if (!m_spells[i])
             continue;
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(m_spells[i]);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(m_spells[i]);
         if (!spellInfo)
         {
             sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
@@ -2078,7 +2076,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
     {
         for (std::vector<uint32>::const_iterator itr = cainfo->auras.begin(); itr != cainfo->auras.end(); ++itr)
         {
-            SpellEntry const *AdditionalSpellInfo = sSpellStore.LookupEntry(*itr);
+            SpellInfo const *AdditionalSpellInfo = sSpellStore.LookupEntry(*itr);
             if (!AdditionalSpellInfo)
             {
                 sLog->outErrorDb("Creature (GUID: %u Entry: %u) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
@@ -2161,7 +2159,7 @@ void Creature::_AddCreatureCategoryCooldown(uint32 category, time_t apply_time)
 
 void Creature::AddCreatureSpellCooldown(uint32 spellid)
 {
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(spellid);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(spellid);
     if (!spellInfo)
         return;
 
@@ -2178,7 +2176,7 @@ void Creature::AddCreatureSpellCooldown(uint32 spellid)
 
 bool Creature::HasCategoryCooldown(uint32 spell_id) const
 {
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell_id);
     if (!spellInfo)
         return false;
 

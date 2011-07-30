@@ -25,6 +25,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "SpellMgr.h"
+#include "SpellInfo.h"
 #include "CreatureAIImpl.h"
 
 void UnitAI::AttackStart(Unit* victim)
@@ -72,10 +73,15 @@ bool UnitAI::DoSpellAttackIfReady(uint32 spell)
 
     if (me->isAttackReady())
     {
-        if (me->IsWithinCombatRange(me->getVictim(), GetSpellMaxRange(spell, false)))
+        if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell))
         {
-            me->CastSpell(me->getVictim(), spell, false);
-            me->resetAttackTimer();
+            if (me->IsWithinCombatRange(me->getVictim(), spellInfo->GetMaxRange(false)))
+            {
+                me->CastSpell(me->getVictim(), spell, false);
+                me->resetAttackTimer();
+            }
+            else
+                return false;
         }
         else
             return false;
@@ -95,7 +101,8 @@ void UnitAI::SelectTargetList(std::list<Unit*> &targetList, uint32 num, SelectAg
 
 float UnitAI::DoGetSpellMaxRange(uint32 spellId, bool positive)
 {
-    return GetSpellMaxRange(spellId, positive);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+    return spellInfo ? spellInfo->GetMaxRange(positive) : 0;
 }
 
 void UnitAI::DoAddAuraToAllHostilePlayers(uint32 spellid)
@@ -139,7 +146,7 @@ void UnitAI::DoCast(uint32 spellId)
         case AITARGET_VICTIM:   target = me->getVictim(); break;
         case AITARGET_ENEMY:
         {
-            const SpellEntry * spellInfo = GetSpellStore()->LookupEntry(spellId);
+            const SpellInfo * spellInfo = GetSpellStore()->LookupEntry(spellId);
             bool playerOnly = spellInfo->AttributesEx3 & SPELL_ATTR3_PLAYERS_ONLY;
             //float range = GetSpellMaxRange(spellInfo, false);
             target = SelectTarget(SELECT_TARGET_RANDOM, 0, GetSpellMaxRange(spellInfo, false), playerOnly);
@@ -149,7 +156,7 @@ void UnitAI::DoCast(uint32 spellId)
         case AITARGET_BUFF:     target = me; break;
         case AITARGET_DEBUFF:
         {
-            const SpellEntry * spellInfo = GetSpellStore()->LookupEntry(spellId);
+            const SpellInfo * spellInfo = GetSpellStore()->LookupEntry(spellId);
             bool playerOnly = spellInfo->AttributesEx3 & SPELL_ATTR3_PLAYERS_ONLY;
             float range = GetSpellMaxRange(spellInfo, false);
 
@@ -175,7 +182,7 @@ void UnitAI::FillAISpellInfo()
     AISpellInfo = new AISpellInfoType[GetSpellStore()->GetNumRows()];
 
     AISpellInfoType *AIInfo = AISpellInfo;
-    const SpellEntry * spellInfo;
+    const SpellInfo * spellInfo;
 
     for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i, ++AIInfo)
     {

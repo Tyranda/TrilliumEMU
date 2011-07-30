@@ -250,7 +250,7 @@ struct boss_twin_baseAI : public ScriptedAI
             m_pInstance->SetData(DATA_HEALTH_TWIN_SHARED, me->GetHealth() >= uiDamage ? me->GetHealth() - uiDamage : 0);
     }
 
-    void SpellHit(Unit* caster, const SpellEntry* spell)
+    void SpellHit(Unit* caster, const SpellInfo* spell)
     {
         if (caster->ToCreature() == me)
             if (spell->GetSpellEffectIdByIndex(0) == 136) //Effect Heal

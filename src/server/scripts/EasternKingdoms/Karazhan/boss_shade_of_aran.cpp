@@ -482,7 +482,7 @@ public:
                 DrinkInturrupted = true;
         }
 
-        void SpellHit(Unit* /*pAttacker*/, const SpellEntry* Spell)
+        void SpellHit(Unit* /*pAttacker*/, const SpellInfo* Spell)
         {
             //We only care about interrupt effects and only if they are durring a spell currently being casted
             if ((Spell->GetSpellEffectIdByIndex(0) != SPELL_EFFECT_INTERRUPT_CAST &&

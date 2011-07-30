@@ -251,7 +251,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
             case EVENT_T_SPELLHIT:
                 if (temp.spell_hit.spellId)
                 {
-                    SpellEntry const* pSpell = sSpellStore.LookupEntry(temp.spell_hit.spellId);
+                    SpellInfo const* pSpell = sSpellStore.LookupEntry(temp.spell_hit.spellId);
                     if (!pSpell)
                     {
                         sLog->outErrorDb("CreatureEventAI:  Creature %u has non-existant SpellID(%u) defined in event %u.", temp.creature_id, temp.spell_hit.spellId, i);
@@ -305,7 +305,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
                 break;
             case EVENT_T_FRIENDLY_MISSING_BUFF:
             {
-                SpellEntry const* pSpell = sSpellStore.LookupEntry(temp.spell_hit.spellId);
+                SpellInfo const* pSpell = sSpellStore.LookupEntry(temp.spell_hit.spellId);
                 if (!pSpell)
                 {
                     sLog->outErrorDb("CreatureEventAI:  Creature %u has non-existant SpellID(%u) defined in event %u.", temp.creature_id, temp.spell_hit.spellId, i);
@@ -382,7 +382,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
             case EVENT_T_BUFFED:
             case EVENT_T_TARGET_BUFFED:
             {
-                SpellEntry const* pSpell = sSpellStore.LookupEntry(temp.buffed.spellId);
+                SpellInfo const* pSpell = sSpellStore.LookupEntry(temp.buffed.spellId);
                 if (!pSpell)
                 {
                     sLog->outErrorDb("CreatureEventAI:  Creature %u has non-existant SpellID(%u) defined in event %u.", temp.creature_id, temp.spell_hit.spellId, i);
@@ -502,7 +502,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Scripts()
                     break;
                 case ACTION_T_CAST:
                 {
-                    const SpellEntry *spell = sSpellStore.LookupEntry(action.cast.spellId);
+                    const SpellInfo *spell = sSpellStore.LookupEntry(action.cast.spellId);
                     if (!spell)
                         sLog->outErrorDb("CreatureEventAI:  Event %u Action %u uses non-existent SpellID %u.", i, j+1, action.cast.spellId);
                     /* FIXME: temp.raw.param3 not have event tipes with recovery time in it....

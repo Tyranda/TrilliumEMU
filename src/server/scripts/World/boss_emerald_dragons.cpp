@@ -281,7 +281,7 @@ class spell_mark_of_nature : public SpellScriptLoader
         {
             PrepareSpellScript(spell_mark_of_nature_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellInfo*/)
+            bool Validate(SpellInfo const* /*spellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_MARK_OF_NATURE))
                     return false;

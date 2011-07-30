@@ -134,7 +134,7 @@ public:
             if (lList.isEmpty())
                 return;
 
-            SpellEntry const* pSpell = GetSpellStore()->LookupEntry(SPELL_ORB_KILL_CREDIT);
+            SpellInfo const* pSpell = GetSpellStore()->LookupEntry(SPELL_ORB_KILL_CREDIT);
 
             for (Map::PlayerList::const_iterator i = lList.begin(); i != lList.end(); ++i)
             {

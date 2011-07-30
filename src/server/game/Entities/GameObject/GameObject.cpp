@@ -944,21 +944,11 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
     if (!trapInfo || trapInfo->type != GAMEOBJECT_TYPE_TRAP)
         return;
 
-    SpellEntry const* trapSpell = sSpellStore.LookupEntry(trapInfo->trap.spellId);
+    SpellInfo const* trapSpell = sSpellMgr->GetSpellInfo(trapInfo->trap.spellId);
     if (!trapSpell)                                          // checked at load already
         return;
 
-    float range;
-    SpellRangeEntry const* srentry = sSpellRangeStore.LookupEntry(trapSpell->rangeIndex);
-    if (GetSpellMaxRangeForHostile(srentry) == GetSpellMaxRangeForFriend(srentry))
-        range = GetSpellMaxRangeForHostile(srentry);
-    else
-        // get owner to check hostility of GameObject
-        if (Unit *owner = GetOwner())
-            range = (float)owner->GetSpellMaxRangeForTarget(target, srentry);
-        else
-            // if no owner assume that object is hostile to target
-            range = GetSpellMaxRangeForHostile(srentry);
+    float range = float(target->GetSpellMaxRangeForTarget(GetOwner(), trapSpell));
 
     // search nearest linked GO
     GameObject* trapGO = NULL;
@@ -1609,7 +1599,7 @@ void GameObject::Use(Unit* user)
     if (!spellId)
         return;
 
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(spellId);
     if (!spellInfo)
     {
         if (user->GetTypeId() != TYPEID_PLAYER || !sOutdoorPvPMgr->HandleCustomSpell(user->ToPlayer(), spellId, this))
@@ -1627,7 +1617,7 @@ void GameObject::Use(Unit* user)
 
 void GameObject::CastSpell(Unit* target, uint32 spellId)
 {
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(spellId);
     if (!spellInfo)
         return;
 

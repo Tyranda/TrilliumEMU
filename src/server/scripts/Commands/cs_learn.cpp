@@ -83,7 +83,7 @@ public:
         char const* allStr = strtok(NULL, " ");
         bool allRanks = allStr ? (strncmp(allStr, "all", strlen(allStr)) == 0) : false;
 
-        SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
+        SpellInfo const* spellInfo = sSpellStore.LookupEntry(spell);
         if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer()))
         {
             handler->PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spell);
@@ -117,7 +117,7 @@ public:
     {
         for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i)
         {
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(i);
+            SpellInfo const* spellInfo = sSpellStore.LookupEntry(i);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
@@ -151,7 +151,7 @@ public:
             if (!entry)
                 continue;
 
-            SpellEntry const *spellInfo = sSpellStore.LookupEntry(entry->spellId);
+            SpellInfo const *spellInfo = sSpellStore.LookupEntry(entry->spellId);
             if (!spellInfo)
                 continue;
 
@@ -215,7 +215,7 @@ public:
             if (!spellId)                                        // ??? none spells in talent
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+            SpellInfo const* spellInfo = sSpellStore.LookupEntry(spellId);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
@@ -294,7 +294,7 @@ public:
             if (!spellid)                                        // ??? none spells in talent
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellid);
+            SpellInfo const* spellInfo = sSpellStore.LookupEntry(spellid);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer(), false))
                 continue;
 
@@ -453,7 +453,7 @@ public:
             if (skillLine->classmask && (skillLine->classmask & classmask) == 0)
                 continue;
 
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
+            SpellInfo const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
             if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player, false))
                 continue;
 

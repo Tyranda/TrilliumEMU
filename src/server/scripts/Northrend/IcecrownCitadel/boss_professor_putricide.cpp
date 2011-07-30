@@ -337,14 +337,14 @@ class boss_professor_putricide : public CreatureScript
                         {
                             case PHASE_COMBAT_2:
                             {
-                                SpellEntry const* spell = sSpellStore.LookupEntry(SPELL_CREATE_CONCOCTION);
+                                SpellInfo const* spell = sSpellStore.LookupEntry(SPELL_CREATE_CONCOCTION);
                                 DoCast(me, SPELL_CREATE_CONCOCTION);
                                 events.ScheduleEvent(EVENT_PHASE_TRANSITION, GetSpellCastTime(sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)) + 100);
                                 break;
                             }
                             case PHASE_COMBAT_3:
                             {
-                                SpellEntry const* spell = sSpellStore.LookupEntry(SPELL_GUZZLE_POTIONS);
+                                SpellInfo const* spell = sSpellStore.LookupEntry(SPELL_GUZZLE_POTIONS);
                                 DoCast(me, SPELL_GUZZLE_POTIONS);
                                 events.ScheduleEvent(EVENT_PHASE_TRANSITION, GetSpellCastTime(sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)) + 100);
                                 break;
@@ -675,7 +675,7 @@ class npc_volatile_ooze : public CreatureScript
                 _newTargetSelectTimer = 0;
             }
 
-            void SpellHitTarget(Unit* /*target*/, SpellEntry const* spell)
+            void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell)
             {
                 if (!_newTargetSelectTimer && sSpellMgr->GetSpellDifficultyId(spell->Id) == sSpellMgr->GetSpellDifficultyId(SPELL_OOZE_ERUPTION))
                     _newTargetSelectTimer = 1000;
@@ -764,7 +764,7 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
         {
             PrepareSpellScript(spell_putricide_ooze_channel_SpellScript);
 
-            bool Validate(SpellEntry const* spell)
+            bool Validate(SpellInfo const* spell)
             {
                 if (!spell->GetSpellAuraRestrictions()->excludeTargetAuraSpell)
                     return false;
@@ -1099,7 +1099,7 @@ class spell_putricide_unbound_plague : public SpellScriptLoader
         {
             PrepareSpellScript(spell_putricide_unbound_plague_SpellScript);
 
-            bool Validate(SpellEntry const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_UNBOUND_PLAGUE))
                     return false;
@@ -1222,7 +1222,7 @@ class spell_putricide_mutated_plague : public SpellScriptLoader
                     return;
 
                 uint32 triggerSpell = GetSpellProto()->GetSpellEffect(aurEff->GetEffIndex())->EffectTriggerSpell;
-                SpellEntry const* spell = sSpellStore.LookupEntry(triggerSpell);
+                SpellInfo const* spell = sSpellStore.LookupEntry(triggerSpell);
                 spell = sSpellMgr->GetSpellForDifficultyFromSpell(spell, caster);
 
                 int32 damage = SpellMgr::CalculateSpellEffectAmount(spell, 0, caster);

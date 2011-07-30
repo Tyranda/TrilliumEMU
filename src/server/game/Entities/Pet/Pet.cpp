@@ -141,7 +141,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         return false;
 
     uint32 summon_spell_id = fields[15].GetUInt32();
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(summon_spell_id);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(summon_spell_id);
 
     bool is_temporary_summoned = spellInfo && GetSpellDuration(spellInfo) > 0;
 
@@ -633,45 +633,6 @@ HappinessState Pet::GetHappinessState()
         return HAPPY;
     else
         return CONTENT;
-}
-
-bool Pet::CanTakeMoreActiveSpells(uint32 spellid)
-{
-    uint8  activecount = 1;
-    uint32 chainstartstore[ACTIVE_SPELLS_MAX];
-
-    if (IsPassiveSpell(spellid))
-        return true;
-
-    chainstartstore[0] = sSpellMgr->GetFirstSpellInChain(spellid);
-
-    for (PetSpellMap::const_iterator itr = m_spells.begin(); itr != m_spells.end(); ++itr)
-    {
-        if (itr->second.state == PETSPELL_REMOVED)
-            continue;
-
-        if (IsPassiveSpell(itr->first))
-            continue;
-
-        uint32 chainstart = sSpellMgr->GetFirstSpellInChain(itr->first);
-
-        uint8 x;
-
-        for (x = 0; x < activecount; x++)
-        {
-            if (chainstart == chainstartstore[x])
-                break;
-        }
-
-        if (x == activecount)                                //spellchain not yet saved -> add active count
-        {
-            ++activecount;
-            if (activecount > ACTIVE_SPELLS_MAX)
-                return false;
-            chainstartstore[x] = chainstart;
-        }
-    }
-    return true;
 }
 
 void Pet::Remove(PetSaveMode mode, bool returnreagent)
@@ -1208,7 +1169,7 @@ void Pet::_LoadAuras(uint32 timediff)
             int32 remaintime = fields[12].GetInt32();
             uint8 remaincharges = fields[13].GetUInt8();
 
-            SpellEntry const* spellproto = sSpellStore.LookupEntry(spellid);
+            SpellInfo const* spellproto = sSpellStore.LookupEntry(spellid);
             if (!spellproto)
             {
                 sLog->outError("Unknown aura (spellid %u), ignore.", spellid);
@@ -1292,7 +1253,7 @@ void Pet::_SaveAuras(SQLTransaction& trans)
 
 bool Pet::addSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpellState state /*= PETSPELL_NEW*/, PetSpellType type /*= PETSPELL_NORMAL*/)
 {
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell_id);
     if (!spellInfo)
     {
         // do pet spell book cleanup
@@ -1453,16 +1414,16 @@ void Pet::InitLevelupSpellsForLevel()
     {
         for (uint8 i = 0; i < MAX_CREATURE_SPELL_DATA_SLOT; ++i)
         {
-            SpellEntry const* spellEntry = sSpellStore.LookupEntry(defSpells->spellid[i]);
-            if (!spellEntry)
+            SpellInfo const* SpellInfo = sSpellStore.LookupEntry(defSpells->spellid[i]);
+            if (!SpellInfo)
                 continue;
 
             // will called first if level down
-            if (spellEntry->GetSpellLevel() > level)
-                unlearnSpell(spellEntry->Id, true);
+            if (SpellInfo->GetSpellLevel() > level)
+                unlearnSpell(SpellInfo->Id, true);
             // will called if level up
             else
-                learnSpell(spellEntry->Id);
+                learnSpell(SpellInfo->Id);
         }
     }
 }

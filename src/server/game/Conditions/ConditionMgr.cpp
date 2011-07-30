@@ -857,7 +857,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
                 return false;
             }
 
-            SpellEntry const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
+            SpellInfo const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
             if (!spellProto)
             {
                 sLog->outErrorDb("SourceEntry %u in `condition` table, does not exist in `spell.dbc`, ignoring.", cond->mSourceEntry);
@@ -920,7 +920,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
         }
         case CONDITION_SOURCE_TYPE_SPELL:
         {
-            SpellEntry const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
+            SpellInfo const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
             if (!spellProto)
             {
                 sLog->outErrorDb("SourceEntry %u in `condition` table, does not exist in `spell.dbc`, ignoring.", cond->mSourceEntry);
@@ -946,7 +946,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
             bool bIsItemSpellValid = false;
             for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
             {
-                if (SpellEntry const* pSpellInfo = sSpellStore.LookupEntry(pItemProto->Spells[i].SpellId))
+                if (SpellInfo const* pSpellInfo = sSpellStore.LookupEntry(pItemProto->Spells[i].SpellId))
                 {
                     if (pItemProto->Spells[i].SpellTrigger == ITEM_SPELLTRIGGER_ON_USE ||
                         pItemProto->Spells[i].SpellTrigger == ITEM_SPELLTRIGGER_ON_NO_DELAY_USE)
@@ -1008,7 +1008,7 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
                     sLog->outErrorDb("SourceEntry %u in `condition` table, does not exist in `creature_template`, ignoring.", cond->mSourceGroup);
                     return false;
                 }
-                SpellEntry const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
+                SpellInfo const* spellProto = sSpellStore.LookupEntry(cond->mSourceEntry);
                 if (!spellProto)
                 {
                     sLog->outErrorDb("SourceEntry %u in `condition` table, does not exist in `spell.dbc`, ignoring.", cond->mSourceEntry);

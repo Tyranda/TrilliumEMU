@@ -794,7 +794,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                             return;
                     }
 
-                    SpellEntry const* spellInfo = sSpellStore.LookupEntry(12721);
+                    SpellInfo const* spellInfo = sSpellStore.LookupEntry(12721);
                     uint32 ticks = GetSpellDuration(spellInfo) / spellInfo->GetEffectAmplitude(0);
 
                     // Add remaining ticks to damage done
@@ -976,7 +976,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                     damage = 12000; // maybe wrong value
                     damage /= count;
 
-                    SpellEntry const *spellInfo = sSpellStore.LookupEntry(42784);
+                    SpellInfo const *spellInfo = sSpellStore.LookupEntry(42784);
 
                      // now deal the damage
                     for (std::list<TargetInfo>::iterator ihit= m_UniqueTargetInfo.begin(); ihit != m_UniqueTargetInfo.end(); ++ihit)
@@ -1514,7 +1514,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
     //spells triggered by dummy effect should not miss
     if (spell_id)
     {
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell_id);
 
         if (!spellInfo)
         {
@@ -1554,7 +1554,7 @@ void Spell::EffectTriggerSpellWithValue(SpellEffectEntry const* effect)
     uint32 triggered_spell_id = effect->EffectTriggerSpell;
 
     // normal case
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
     {
@@ -1571,7 +1571,7 @@ void Spell::EffectTriggerSpellWithValue(SpellEffectEntry const* effect)
 void Spell::EffectTriggerRitualOfSummoning(SpellEffectEntry const* effect)
 {
     uint32 triggered_spell_id = effect->EffectTriggerSpell;
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
     {
@@ -1592,7 +1592,7 @@ void Spell::EffectForceCast(SpellEffectEntry const* effect)
     uint32 triggered_spell_id = effect->EffectTriggerSpell;
 
     // normal case
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
     {
@@ -1637,7 +1637,7 @@ void Spell::EffectForceCastWithValue(SpellEffectEntry const* effect)
     uint32 triggered_spell_id = effect->EffectTriggerSpell;
 
     // normal case
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
     {
@@ -1714,7 +1714,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
         case 29284:
         {
             // Brittle Armor
-            SpellEntry const* spell = sSpellStore.LookupEntry(24575);
+            SpellInfo const* spell = sSpellStore.LookupEntry(24575);
             if (!spell)
                 return;
 
@@ -1726,7 +1726,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
         case 29286:
         {
             // Mercurial Shield
-            SpellEntry const* spell = sSpellStore.LookupEntry(26464);
+            SpellInfo const* spell = sSpellStore.LookupEntry(26464);
             if (!spell)
                 return;
 
@@ -1748,7 +1748,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
             for (Unit::AuraApplicationMap::iterator iter = Auras.begin(); iter != Auras.end();)
             {
                 // remove all harmful spells on you...
-                SpellEntry const* spell = iter->second->GetBase()->GetSpellProto();
+                SpellInfo const* spell = iter->second->GetBase()->GetSpellProto();
                 if ((spell->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC // only affect magic spells
                     || ((1<<spell->GetDispel()) & dispelMask))
                     // ignore positive and passive auras
@@ -1781,7 +1781,7 @@ void Spell::EffectTriggerSpell(SpellEffectEntry const* effect)
     }
 
     // normal case
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
     if (!spellInfo)
     {
         sLog->outError("EffectTriggerSpell of spell %u: triggering unknown spell id %i", m_spellInfo->Id, triggered_spell_id);
@@ -1806,7 +1806,7 @@ void Spell::EffectTriggerMissileSpell(SpellEffectEntry const* effect)
     uint32 triggered_spell_id = effect->EffectTriggerSpell;
 
     // normal case
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(triggered_spell_id);
 
     if (!spellInfo)
     {
@@ -2625,7 +2625,7 @@ void Spell::EffectEnergize(SpellEffectEntry const* effect)
             sSpellMgr->GetSetOfSpellsInSpellGroup(SPELL_GROUP_ELIXIR_BATTLE, avalibleElixirs);
         for (std::set<uint32>::iterator itr = avalibleElixirs.begin(); itr != avalibleElixirs.end() ;)
         {
-            SpellEntry const *spellInfo = sSpellStore.LookupEntry(*itr);
+            SpellInfo const *spellInfo = sSpellStore.LookupEntry(*itr);
             if (spellInfo->GetSpellLevel() < m_spellInfo->GetSpellLevel() || spellInfo->GetSpellLevel() > unitTarget->getLevel())
                 avalibleElixirs.erase(itr++);
             else if (sSpellMgr->IsSpellMemberOfSpellGroup(*itr, SPELL_GROUP_ELIXIR_SHATTRATH))
@@ -3084,7 +3084,7 @@ void Spell::EffectSummonType(SpellEffectEntry const* effect)
 
             // The spell that this effect will trigger. It has SPELL_AURA_CONTROL_VEHICLE
             uint32 spell = VEHICLE_SPELL_RIDE_HARDCODED;
-            if (SpellEntry const* spellProto = sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(m_spellInfo, effect->EffectIndex)))
+            if (SpellInfo const* spellProto = sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(m_spellInfo, effect->EffectIndex)))
                 spell = spellProto->Id;
 
             // Hard coded enter vehicle spell
@@ -3576,7 +3576,7 @@ void Spell::EffectEnchantItemTmp(SpellEffectEntry const* effect)
                 return;
         }
 
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell_id);
         if (!spellInfo)
         {
             sLog->outError("Spell::EffectEnchantItemTmp: unknown spell id %i", spell_id);
@@ -3814,7 +3814,7 @@ void Spell::EffectLearnPetSpell(SpellEffectEntry const* effect)
     if (!pet->isAlive())
         return;
 
-    SpellEntry const *learn_spellproto = sSpellStore.LookupEntry(effect->EffectTriggerSpell);
+    SpellInfo const *learn_spellproto = sSpellStore.LookupEntry(effect->EffectTriggerSpell);
     if (!learn_spellproto)
         return;
 
@@ -4202,7 +4202,7 @@ void Spell::EffectInterruptCast(SpellEffectEntry const* effect)
     {
         if (Spell* spell = unitTarget->GetCurrentSpell(CurrentSpellTypes(i)))
         {
-            SpellEntry const* curSpellInfo = spell->m_spellInfo;
+            SpellInfo const* curSpellInfo = spell->m_spellInfo;
             // check if we can interrupt spell
             if ((spell->getState() == SPELL_STATE_CASTING
                 || (spell->getState() == SPELL_STATE_PREPARING && spell->GetCastTime() > 0.0f))
@@ -4345,7 +4345,7 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
                     for (Unit::AuraEffectList::const_iterator i = mPeriodic.begin(); i != mPeriodic.end(); ++i)
                     {
                         AuraEffect const* aurEff = *i;
-                        SpellEntry const* spellInfo = aurEff->GetSpellProto();
+                        SpellInfo const* spellInfo = aurEff->GetSpellProto();
                         // search our Blood Plague and Frost Fever on target
                         if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_DEATHKNIGHT && spellInfo->GetSpellClassOptions()->SpellFamilyFlags[2] & 0x2 &&
                             aurEff->GetCasterGUID() == m_caster->GetGUID())
@@ -5507,7 +5507,7 @@ void Spell::EffectStuck(SpellEffectEntry const* /*effect*/)
     // pTarget->TeleportTo(pTarget->m_homebindMapId, pTarget->m_homebindX, pTarget->m_homebindY, pTarget->m_homebindZ, pTarget->GetOrientation(), (unitTarget == m_caster ? TELE_TO_SPELL : 0));
 
     // Stuck spell trigger Hearthstone cooldown
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(8690);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(8690);
     if (!spellInfo)
         return;
     Spell spell(pTarget, spellInfo, true, 0);
@@ -6224,7 +6224,7 @@ void Spell::EffectDestroyAllTotems(SpellEffectEntry const* /*effect*/)
         if (totem && totem->isTotem())
         {
             uint32 spell_id = totem->GetUInt32Value(UNIT_CREATED_BY_SPELL);
-            SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell_id);
+            SpellInfo const* spellInfo = sSpellStore.LookupEntry(spell_id);
             if (spellInfo)
             {
                 mana += spellInfo->GetManaCost();
@@ -6995,7 +6995,7 @@ void Spell::EffectCastButtons(SpellEffectEntry const* effect)
         if (p_caster->HasSpellCooldown(spell_id))
             continue;
 
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell_id);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell_id);
         uint32 cost = CalculatePowerCost(spellInfo, m_caster, GetSpellSchoolMask(spellInfo));
 
         if (m_caster->GetPower(POWER_MANA) < cost)

@@ -87,7 +87,7 @@ void WorldSession::HandlePetAction(WorldPacket & recv_data)
 
     if (!pet->isAlive())
     {
-        SpellEntry const* spell = (flag == ACT_ENABLED || flag == ACT_PASSIVE) ? sSpellStore.LookupEntry(spellid) : NULL;
+        SpellInfo const* spell = (flag == ACT_ENABLED || flag == ACT_PASSIVE) ? sSpellStore.LookupEntry(spellid) : NULL;
         if (!spell)
             return;
         if (!(spell->Attributes & SPELL_ATTR0_CASTABLE_WHILE_DEAD))
@@ -291,7 +291,7 @@ void WorldSession::HandlePetActionHelper(Unit *pet, uint64 guid1, uint16 spellid
                 unit_target = ObjectAccessor::GetUnit(*_player, guid2);
 
             // do not cast unknown spells
-            SpellEntry const *spellInfo = sSpellStore.LookupEntry(spellid);
+            SpellInfo const *spellInfo = sSpellStore.LookupEntry(spellid);
             if (!spellInfo)
             {
                 sLog->outError("WORLD: unknown PET spell id %i", spellid);
@@ -753,7 +753,7 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    SpellEntry const *spellInfo = sSpellStore.LookupEntry(spellId);
+    SpellInfo const *spellInfo = sSpellStore.LookupEntry(spellId);
     if (!spellInfo)
     {
         sLog->outError("WORLD: unknown PET spell id %i", spellId);

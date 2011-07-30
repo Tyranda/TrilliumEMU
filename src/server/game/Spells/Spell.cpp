@@ -442,17 +442,25 @@ void SpellCastTargets::OutDebug() const
     sLog->outString("elevation: %f", m_elevation);
 }
 
-Spell::Spell(Unit* Caster, SpellEntry const *info, bool triggered, uint64 originalCasterGUID, bool skipCheck, bool castedClientside):
+SpellValue::SpellValue(SpellInfo const* proto)
+{
+    for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        EffectBasePoints[i] = proto->Effects[i].BasePoints;
+    MaxAffectedTargets = proto->MaxAffectedTargets;
+    RadiusMod = 1.0f;
+    AuraStackAmount = 1;
+}
+
+Spell::Spell(Unit* Caster, SpellInfo const *info, bool triggered, uint64 originalCasterGUID, bool skipCheck, bool castedClientside):
 m_spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(info, Caster)),
 m_caster(Caster), m_spellValue(new SpellValue(m_spellInfo))
 {
-    m_customAttr = sSpellMgr->GetSpellCustomAttr(m_spellInfo->Id);
     m_customError = SPELL_CUSTOM_ERROR_NONE;
     m_skipCheck = skipCheck;
     m_selfContainer = NULL;
     m_referencedFromCurrentSpell = false;
     m_executedCurrently = false;
-    m_needComboPoints = NeedsComboPoints(m_spellInfo);
+    m_needComboPoints = m_spellInfo->NeedsComboPoints();
     m_comboPointGain = 0;
     m_delayStart = 0;
     m_delayAtDamageCount = 0;
@@ -814,10 +822,10 @@ void Spell::SelectSpellTargets()
             if (speed > 0.0f)
                 m_delayMoment = (uint64)floor(m_targets.GetDist2d() / speed * 1000.0f);
         }
-        else if (m_spellInfo->speed > 0.0f)
+        else if (m_spellInfo->Speed > 0.0f)
         {
             float dist = m_caster->GetDistance(*m_targets.GetDst());
-            m_delayMoment = (uint64) floor(dist / m_spellInfo->speed * 1000.0f);
+            m_delayMoment = (uint64) floor(dist / m_spellInfo->Speed * 1000.0f);
         }
     }
 }
@@ -935,8 +943,8 @@ void Spell::AddUnitTarget(Unit* pVictim, uint32 effIndex)
             ihit->scaleAura = false;
             if (m_auraScaleMask && ihit->effectMask == m_auraScaleMask && m_caster != pVictim)
             {
-                SpellEntry const * auraSpell = sSpellStore.LookupEntry(sSpellMgr->GetFirstSpellInChain(m_spellInfo->Id));
-                if (uint32(pVictim->getLevel() + 10) >= auraSpell->GetSpellLevel())
+                SpellInfo const* auraSpell = sSpellMgr->GetSpellInfo(sSpellMgr->GetFirstSpellInChain(m_spellInfo->Id));
+                if (uint32(pVictim->getLevel() + 10) >= auraSpell->SpellLevel)
                     ihit->scaleAura = true;
             }
             return;
@@ -956,8 +964,8 @@ void Spell::AddUnitTarget(Unit* pVictim, uint32 effIndex)
     target.scaleAura  = false;
     if (m_auraScaleMask && target.effectMask == m_auraScaleMask && m_caster != pVictim)
     {
-        SpellEntry const * auraSpell = sSpellStore.LookupEntry(sSpellMgr->GetFirstSpellInChain(m_spellInfo->Id));
-        if (uint32(pVictim->getLevel() + 10) >= auraSpell->GetSpellLevel())
+        SpellInfo const* auraSpell = sSpellMgr->GetSpellInfo(sSpellMgr->GetFirstSpellInChain(m_spellInfo->Id));
+        if (uint32(pVictim->getLevel() + 10) >= auraSpell->SpellLevel)
             target.scaleAura = true;
     }
 
@@ -980,7 +988,7 @@ void Spell::AddUnitTarget(Unit* pVictim, uint32 effIndex)
         float dist = m_caster->GetDistance(pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ());
 
         if (dist < 5.0f) dist = 5.0f;
-        target.timeDelay = (uint64) floor(dist / m_spellInfo->speed * 1000.0f);
+        target.timeDelay = (uint64) floor(dist / m_spellInfo->Speed * 1000.0f);
 
         // Calculate minimum incoming time
         if (m_delayMoment == 0 || m_delayMoment>target.timeDelay)
@@ -1051,13 +1059,13 @@ void Spell::AddGOTarget(GameObject* go, uint32 effIndex)
     target.processed  = false;                              // Effects not apply on target
 
     // Spell have speed - need calculate incoming time
-    if (m_spellInfo->speed > 0.0f)
+    if (m_spellInfo->Speed > 0.0f)
     {
         // calculate spell incoming interval
         float dist = m_caster->GetDistance(go->GetPositionX(), go->GetPositionY(), go->GetPositionZ());
         if (dist < 5.0f)
             dist = 5.0f;
-        target.timeDelay = uint64(floor(dist / m_spellInfo->speed * 1000.0f));
+        target.timeDelay = uint64(floor(dist / m_spellInfo->Speed * 1000.0f));
         if (m_delayMoment == 0 || m_delayMoment > target.timeDelay)
             m_delayMoment = target.timeDelay;
     }
@@ -1447,7 +1455,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask, bool 
     {
         // Select rank for aura with level requirements only in specific cases
         // Unit has to be target only of aura effect, both caster and target have to be players, target has to be other than unit target
-        SpellEntry const* aurSpellInfo = m_spellInfo;
+        SpellInfo const* aurSpellInfo = m_spellInfo;
         int32 basePoints[3];
         if (scaleAura)
         {
@@ -3610,7 +3618,7 @@ void Spell::finish(bool ok)
     {
         // Unsummon statue
         uint32 spell = m_caster->GetUInt32Value(UNIT_CREATED_BY_SPELL);
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(spell);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(spell);
         if (spellInfo && spellInfo->SpellIconID == 2056)
         {
             sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Statue %d is unsummoned in spell %d finish", m_caster->GetGUIDLow(), m_spellInfo->Id);
@@ -3675,7 +3683,7 @@ void Spell::SendCastResult(SpellCastResult result)
     SendCastResult(m_caster->ToPlayer(), m_spellInfo, m_cast_count, result, m_customError);
 }
 
-void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo, uint8 cast_count, SpellCastResult result, SpellCustomErrors customError /*= SPELL_CUSTOM_ERROR_NONE*/)
+void Spell::SendCastResult(Player* caster, SpellInfo const* spellInfo, uint8 cast_count, SpellCastResult result, SpellCustomErrors customError /*= SPELL_CUSTOM_ERROR_NONE*/)
 {
     if (result == SPELL_CAST_OK)
         return;
@@ -4439,22 +4447,22 @@ void Spell::TakeReagents()
     }
 }
 
-void Spell::HandleThreatSpells(uint32 spellId)
+void Spell::HandleThreatSpells()
 {
-    if (!m_targets.GetUnitTarget() || !spellId)
+    if (!m_targets.GetUnitTarget())
         return;
 
     if (!m_targets.GetUnitTarget()->CanHaveThreatList())
         return;
 
-    uint16 threat = sSpellMgr->GetSpellThreat(spellId);
+    uint16 threat = sSpellMgr->GetSpellThreat(m_spellInfo->Id);
 
     if (!threat)
         return;
 
     m_targets.GetUnitTarget()->AddThreat(m_caster, float(threat));
 
-    sLog->outStaticDebug("Spell %u, rank %u, added an additional %i threat", spellId, sSpellMgr->GetSpellRank(spellId), threat);
+    sLog->outStaticDebug("Spell %u, rank %u, added an additional %i threat", m_spellInfo->Id, m_spellInfo->GetRank(), threat);
 }
 
 void Spell::HandleEffects(Unit *pUnitTarget, Item *pItemTarget, GameObject *pGOTarget, uint32 i)
@@ -4910,7 +4918,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!pet)
                     return SPELL_FAILED_NO_PET;
 
-                SpellEntry const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->GetEffectTriggerSpell(i));
+                SpellInfo const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->GetEffectTriggerSpell(i));
 
                 if (!learn_spellproto)
                     return SPELL_FAILED_NOT_KNOWN;
@@ -4929,7 +4937,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!pet)
                     return SPELL_FAILED_NO_PET;
 
-                SpellEntry const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->GetEffectTriggerSpell(i));
+                SpellInfo const *learn_spellproto = sSpellStore.LookupEntry(m_spellInfo->GetEffectTriggerSpell(i));
 
                 if (!learn_spellproto)
                     return SPELL_FAILED_NOT_KNOWN;
@@ -7135,9 +7143,9 @@ void Spell::PrepareTriggersExecutedOnHit()
     {
         if (!(*i)->IsAffectedOnSpell(m_spellInfo))
             continue;
-        SpellEntry const *auraSpellInfo = (*i)->GetSpellProto();
+        SpellInfo const *auraSpellInfo = (*i)->GetSpellProto();
         uint32 auraSpellIdx = (*i)->GetEffIndex();
-        if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(auraSpellInfo->GetEffectTriggerSpell(auraSpellIdx)))
+        if (SpellInfo const *spellInfo = sSpellStore.LookupEntry(auraSpellInfo->GetEffectTriggerSpell(auraSpellIdx)))
         {
             // calculate the chance using spell base amount, because aura amount is not updated on combo-points change
             // this possibly needs fixing

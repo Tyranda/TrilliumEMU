@@ -86,7 +86,7 @@ void LoadSkillDiscoveryTable()
         if (reqSkillOrSpell > 0)                            // spell case
         {
             uint32 absReqSkillOrSpell = uint32(reqSkillOrSpell);
-            SpellEntry const* reqSpellEntry = sSpellStore.LookupEntry(absReqSkillOrSpell);
+            SpellInfo const* reqSpellEntry = sSpellStore.LookupEntry(absReqSkillOrSpell);
             if (!reqSpellEntry)
             {
                 if (reportedReqSpells.find(absReqSkillOrSpell) == reportedReqSpells.end())
@@ -142,12 +142,12 @@ void LoadSkillDiscoveryTable()
     // report about empty data for explicit discovery spells
     for (uint32 spell_id = 1; spell_id < sSpellStore.GetNumRows(); ++spell_id)
     {
-        SpellEntry const* spellEntry = sSpellStore.LookupEntry(spell_id);
-        if (!spellEntry)
+        SpellInfo const* SpellInfo = sSpellStore.LookupEntry(spell_id);
+        if (!SpellInfo)
             continue;
 
         // skip not explicit discovery spells
-        if (!IsExplicitDiscoverySpell(spellEntry))
+        if (!IsExplicitDiscoverySpell(SpellInfo))
             continue;
 
         if (SkillDiscoveryStore.find(int32(spell_id)) == SkillDiscoveryStore.end())

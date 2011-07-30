@@ -57,7 +57,7 @@ class icecrown_citadel_teleport : public GameObjectScript
         {
             player->PlayerTalkClass->ClearMenus();
             player->CLOSE_GOSSIP_MENU();
-            SpellEntry const* spell = sSpellStore.LookupEntry(action);
+            SpellInfo const* spell = sSpellStore.LookupEntry(action);
             if (!spell)
                 return false;
 

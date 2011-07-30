@@ -179,7 +179,6 @@ class Pet : public Guardian
         void UpdateDamagePhysical(WeaponAttackType attType);
         */
 
-        bool CanTakeMoreActiveSpells(uint32 SpellIconID);
         void ToggleAutocast(uint32 spellid, bool apply);
 
         bool HasSpell(uint32 spell) const;

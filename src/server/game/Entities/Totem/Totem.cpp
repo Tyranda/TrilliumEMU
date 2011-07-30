@@ -74,7 +74,7 @@ void Totem::InitStats(uint32 duration)
     Minion::InitStats(duration);
 
     // Get spell cast by totem
-    if (SpellEntry const* totemSpell = sSpellStore.LookupEntry(GetSpell()))
+    if (SpellInfo const* totemSpell = sSpellStore.LookupEntry(GetSpell()))
         if (GetSpellCastTime(totemSpell))   // If spell has cast time -> its an active totem
             m_type = TOTEM_ACTIVE;
 
@@ -118,7 +118,7 @@ void Totem::UnSummon()
     {
         owner->SendAutoRepeatCancel(this);
 
-        if (SpellEntry const* spell = sSpellStore.LookupEntry(GetUInt32Value(UNIT_CREATED_BY_SPELL)))
+        if (SpellInfo const* spell = sSpellStore.LookupEntry(GetUInt32Value(UNIT_CREATED_BY_SPELL)))
             owner->SendCooldownEvent(spell, 0, NULL, false);
 
         if (Group* group = owner->GetGroup())
@@ -135,7 +135,7 @@ void Totem::UnSummon()
     AddObjectToRemoveList();
 }
 
-bool Totem::IsImmunedToSpellEffect(SpellEntry const* spellInfo, uint32 index) const
+bool Totem::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) const
 {
     // TODO: possibly all negative auras immune?
     if (GetEntry() == 5925)

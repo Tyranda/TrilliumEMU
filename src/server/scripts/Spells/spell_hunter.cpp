@@ -53,7 +53,7 @@ public:
     class spell_hun_chimera_shot_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
                 return false;
@@ -149,7 +149,7 @@ public:
     class spell_hun_invigoration_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_invigoration_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_INVIGORATION_TRIGGERED))
                 return false;
@@ -184,7 +184,7 @@ public:
     class spell_hun_last_stand_pet_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_last_stand_pet_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
                 return false;
@@ -219,13 +219,13 @@ public:
     class spell_hun_masters_call_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_masters_call_SpellScript)
-        bool Validate(SpellEntry const* spellEntry)
+        bool Validate(SpellInfo const* SpellInfo)
         {
             if (!sSpellStore.LookupEntry(HUNTER_SPELL_MASTERS_CALL_TRIGGERED))
                 return false;
-            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_0)))
+            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(SpellInfo, EFFECT_0)))
                 return false;
-            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(spellEntry, EFFECT_1)))
+            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(SpellInfo, EFFECT_1)))
                 return false;
             return true;
         }
@@ -277,7 +277,7 @@ public:
             const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
             for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
             {
-                SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                SpellInfo const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                 ///! If spellId in cooldown map isn't valid, the above will return a null pointer.
                 if (spellInfo &&
@@ -352,7 +352,7 @@ public:
     class spell_hun_sniper_training_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_hun_sniper_training_AuraScript)
-        bool Validate(SpellEntry const* /*entry*/)
+        bool Validate(SpellInfo const* /*entry*/)
         {
             if (!sSpellStore.LookupEntry(SPELL_SNIPER_TRAINING_R1))
                 return false;
@@ -376,7 +376,7 @@ public:
             Unit* target = GetTarget();
             if (!target->HasAura(spellId))
             {
-                SpellEntry const* triggeredSpellInfo = sSpellStore.LookupEntry(spellId);
+                SpellInfo const* triggeredSpellInfo = sSpellStore.LookupEntry(spellId);
                 Unit* triggerCaster = GetTriggeredSpellCaster(triggeredSpellInfo, caster, target);
                 triggerCaster->CastSpell(target, triggeredSpellInfo, true, 0, aurEff);
             }
@@ -416,7 +416,7 @@ public:
     class spell_hun_pet_heart_of_the_phoenix_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_heart_of_the_phoenix_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED))
                 return false;
@@ -463,7 +463,7 @@ public:
     class spell_hun_pet_carrion_feeder_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_pet_carrion_feeder_SpellScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_CARRION_FEEDER_TRIGGERED))
                 return false;

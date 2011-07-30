@@ -25,7 +25,7 @@
 #include "SpellScript.h"
 #include "SpellMgr.h"
 
-bool _SpellScript::_Validate(SpellEntry const* entry)
+bool _SpellScript::_Validate(SpellInfo const* entry)
 {
     if (!Validate(entry))
     {
@@ -63,7 +63,7 @@ _SpellScript::EffectHook::EffectHook(uint8 _effIndex)
     effIndex = _effIndex;
 }
 
-uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellEntry const* spellEntry)
+uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellInfo const* SpellInfo)
 {
     uint8 mask = 0;
     if ((effIndex == EFFECT_ALL) || (effIndex == EFFECT_FIRST_FOUND))
@@ -72,21 +72,21 @@ uint8 _SpellScript::EffectHook::GetAffectedEffectsMask(SpellEntry const* spellEn
         {
             if ((effIndex == EFFECT_FIRST_FOUND) && mask)
                 return mask;
-            if (CheckEffect(spellEntry, i))
+            if (CheckEffect(SpellInfo, i))
                 mask |= (uint8)1<<i;
         }
     }
     else
     {
-        if (CheckEffect(spellEntry, effIndex))
+        if (CheckEffect(SpellInfo, effIndex))
             mask |= (uint8)1<<effIndex;
     }
     return mask;
 }
 
-bool _SpellScript::EffectHook::IsEffectAffected(SpellEntry const* spellEntry, uint8 effIndex)
+bool _SpellScript::EffectHook::IsEffectAffected(SpellInfo const* SpellInfo, uint8 effIndex)
 {
-    return GetAffectedEffectsMask(spellEntry) & 1<<effIndex;
+    return GetAffectedEffectsMask(SpellInfo) & 1<<effIndex;
 }
 
 std::string _SpellScript::EffectHook::EffIndexToString()
@@ -107,13 +107,13 @@ std::string _SpellScript::EffectHook::EffIndexToString()
     return "Invalid Value";
 }
 
-bool _SpellScript::EffectNameCheck::Check(SpellEntry const* spellEntry, uint8 effIndex)
+bool _SpellScript::EffectNameCheck::Check(SpellInfo const* SpellInfo, uint8 effIndex)
 {
-    if (!spellEntry->GetSpellEffectIdByIndex(effIndex) && !effName)
+    if (!SpellInfo->GetSpellEffectIdByIndex(effIndex) && !effName)
         return true;
-    if (!spellEntry->GetSpellEffectIdByIndex(effIndex))
+    if (!SpellInfo->GetSpellEffectIdByIndex(effIndex))
         return false;
-    return (effName == SPELL_EFFECT_ANY) || (spellEntry->GetSpellEffectIdByIndex(effIndex) == effName);
+    return (effName == SPELL_EFFECT_ANY) || (SpellInfo->GetSpellEffectIdByIndex(effIndex) == effName);
 }
 
 std::string _SpellScript::EffectNameCheck::ToString()
@@ -129,13 +129,13 @@ std::string _SpellScript::EffectNameCheck::ToString()
     }
 }
 
-bool _SpellScript::EffectAuraNameCheck::Check(SpellEntry const* spellEntry, uint8 effIndex)
+bool _SpellScript::EffectAuraNameCheck::Check(SpellInfo const* SpellInfo, uint8 effIndex)
 {
-    if (!spellEntry->GetEffectApplyAuraNameByIndex(effIndex) && !effAurName)
+    if (!SpellInfo->GetEffectApplyAuraNameByIndex(effIndex) && !effAurName)
         return true;
-    if (!spellEntry->GetEffectApplyAuraNameByIndex(effIndex))
+    if (!SpellInfo->GetEffectApplyAuraNameByIndex(effIndex))
         return false;
-    return (effAurName == SPELL_EFFECT_ANY) || (spellEntry->GetEffectApplyAuraNameByIndex(effIndex) == effAurName);
+    return (effAurName == SPELL_EFFECT_ANY) || (SpellInfo->GetEffectApplyAuraNameByIndex(effIndex) == effAurName);
 }
 
 std::string _SpellScript::EffectAuraNameCheck::ToString()
@@ -172,9 +172,9 @@ std::string SpellScript::EffectHandler::ToString()
     return "Index: " + EffIndexToString() + " Name: " +_SpellScript::EffectNameCheck::ToString();
 }
 
-bool SpellScript::EffectHandler::CheckEffect(SpellEntry const* spellEntry, uint8 effIndex)
+bool SpellScript::EffectHandler::CheckEffect(SpellInfo const* SpellInfo, uint8 effIndex)
 {
-    return _SpellScript::EffectNameCheck::Check(spellEntry, effIndex);
+    return _SpellScript::EffectNameCheck::Check(SpellInfo, effIndex);
 }
 
 void SpellScript::EffectHandler::Call(SpellScript* spellScript, SpellEffIndex effIndex)
@@ -205,11 +205,11 @@ std::string SpellScript::UnitTargetHandler::ToString()
     return oss.str();
 }
 
-bool SpellScript::UnitTargetHandler::CheckEffect(SpellEntry const* spellEntry, uint8 effIndex)
+bool SpellScript::UnitTargetHandler::CheckEffect(SpellInfo const* SpellInfo, uint8 effIndex)
 {
     if (!targetType)
         return false;
-    return (effIndex == EFFECT_ALL) || (spellEntry->GetEffectImplicitTargetAByIndex(effIndex) == targetType || spellEntry->GetEffectImplicitTargetAByIndex(effIndex) == targetType);
+    return (effIndex == EFFECT_ALL) || (SpellInfo->GetEffectImplicitTargetAByIndex(effIndex) == targetType || SpellInfo->GetEffectImplicitTargetAByIndex(effIndex) == targetType);
 }
 
 void SpellScript::UnitTargetHandler::Call(SpellScript* spellScript, std::list<Unit*>& unitTargets)
@@ -217,7 +217,7 @@ void SpellScript::UnitTargetHandler::Call(SpellScript* spellScript, std::list<Un
     (spellScript->*pUnitTargetHandlerScript)(unitTargets);
 }
 
-bool SpellScript::_Validate(SpellEntry const* entry)
+bool SpellScript::_Validate(SpellInfo const* entry)
 {
     for (std::list<EffectHandler>::iterator itr = OnEffect.begin(); itr != OnEffect.end();  ++itr)
         if (!(*itr).GetAffectedEffectsMask(entry))
@@ -265,7 +265,7 @@ Unit* SpellScript::GetOriginalCaster()
      return m_spell->GetOriginalCaster();
 }
 
-SpellEntry const* SpellScript::GetSpellInfo()
+SpellInfo const* SpellScript::GetSpellInfo()
 {
     return m_spell->GetSpellInfo();
 }
@@ -476,7 +476,7 @@ void SpellScript::SetCustomCastResultMessage(SpellCustomErrors result)
     m_spell->m_customError = result;
 }
 
-bool AuraScript::_Validate(SpellEntry const* entry)
+bool AuraScript::_Validate(SpellInfo const* entry)
 {
     for (std::list<CheckAreaTargetHandler>::iterator itr = DoCheckAreaTarget.begin(); itr != DoCheckAreaTarget.end();  ++itr)
         if (!HasAreaAuraEffect(entry))
@@ -552,9 +552,9 @@ AuraScript::EffectBase::EffectBase(uint8 _effIndex, uint16 _effName)
 {
 }
 
-bool AuraScript::EffectBase::CheckEffect(SpellEntry const* spellEntry, uint8 effIndex)
+bool AuraScript::EffectBase::CheckEffect(SpellInfo const* SpellInfo, uint8 effIndex)
 {
-    return _SpellScript::EffectAuraNameCheck::Check(spellEntry, effIndex);
+    return _SpellScript::EffectAuraNameCheck::Check(SpellInfo, effIndex);
 }
 
 std::string AuraScript::EffectBase::ToString()
@@ -707,7 +707,7 @@ void AuraScript::PreventDefaultAction()
     }
 }
 
-SpellEntry const* AuraScript::GetSpellProto() const
+SpellInfo const* AuraScript::GetSpellProto() const
 {
     return m_aura->GetSpellProto();
 }

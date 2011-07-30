@@ -178,7 +178,7 @@ void ScriptedAI::DoStopAttack()
         me->AttackStop();
 }
 
-void ScriptedAI::DoCastSpell(Unit* pTarget, SpellEntry const* pSpellInfo, bool bTriggered)
+void ScriptedAI::DoCastSpell(Unit* pTarget, SpellInfo const* pSpellInfo, bool bTriggered)
 {
     if (!pTarget || me->IsNonMeleeSpellCasted(false))
         return;
@@ -206,7 +206,7 @@ Creature* ScriptedAI::DoSpawnCreature(uint32 entry, float offsetX, float offsetY
     return me->SummonCreature(entry, me->GetPositionX() + offsetX, me->GetPositionY() + offsetY, me->GetPositionZ() + offsetZ, angle, TempSummonType(type), despawntime);
 }
 
-SpellEntry const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mechanic, SelectTargetType targets, uint32 powerCostMin, uint32 powerCostMax, float rangeMin, float rangeMax, SelectEffect effects)
+SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mechanic, SelectTargetType targets, uint32 powerCostMin, uint32 powerCostMax, float rangeMin, float rangeMax, SelectEffect effects)
 {
     //No target so we can't cast
     if (!target)
@@ -217,12 +217,12 @@ SpellEntry const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 me
         return false;
 
     //Using the extended script system we first create a list of viable spells
-    SpellEntry const* apSpell[CREATURE_MAX_SPELLS];
-    memset(apSpell, 0, CREATURE_MAX_SPELLS * sizeof(SpellEntry*));
+    SpellInfo const* apSpell[CREATURE_MAX_SPELLS];
+    memset(apSpell, 0, CREATURE_MAX_SPELLS * sizeof(SpellInfo*));
 
     uint32 spellCount = 0;
 
-    SpellEntry const* tempSpell = NULL;
+    SpellInfo const* tempSpell = NULL;
     SpellRangeEntry const* tempRange = NULL;
 
     //Check if each spell is viable(set it to null if not)
@@ -291,7 +291,7 @@ SpellEntry const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 me
     return apSpell[urand(0, spellCount - 1)];
 }
 
-bool ScriptedAI::CanCast(Unit* target, SpellEntry const* spell, bool triggered /*= false*/)
+bool ScriptedAI::CanCast(Unit* target, SpellInfo const* spell, bool triggered /*= false*/)
 {
     //No target so we can't cast
     if (!target || !spell)

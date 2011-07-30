@@ -215,7 +215,7 @@ void ScriptMgr::FillSpellSummary()
 {
     SpellSummary = new TSpellSummary[GetSpellStore()->GetNumRows()];
 
-    SpellEntry const* pTempSpell;
+    SpellInfo const* pTempSpell;
 
     for (uint32 i = 0; i < GetSpellStore()->GetNumRows(); ++i)
     {

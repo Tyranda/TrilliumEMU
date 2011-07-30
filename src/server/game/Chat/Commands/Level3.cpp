@@ -1005,7 +1005,7 @@ bool ChatHandler::HandleLookupSpellCommand(const char *args)
     // Search in Spell.dbc
     for (uint32 id = 0; id < sSpellStore.GetNumRows(); id++)
     {
-        SpellEntry const *spellInfo = sSpellStore.LookupEntry(id);
+        SpellInfo const *spellInfo = sSpellStore.LookupEntry(id);
         if (spellInfo)
         {
             int loc = GetSessionDbcLocale();
@@ -1958,7 +1958,7 @@ bool ChatHandler::HandleAuraCommand(const char *args)
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
     uint32 spellID = extractSpellIdFromLink((char*)args);
 
-    if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(spellID))
+    if (SpellInfo const *spellInfo = sSpellStore.LookupEntry(spellID))
         Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, target, target);
 
     return true;
@@ -3795,7 +3795,7 @@ bool ChatHandler::HandleCastCommand(const char *args)
     if (!spell)
         return false;
 
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(spell);
     if (!spellInfo)
     {
         PSendSysMessage(LANG_COMMAND_NOSPELLFOUND);
@@ -3873,7 +3873,7 @@ bool ChatHandler::HandleCastDistCommand(const char *args)
     if (!spell)
         return false;
 
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(spell);
     if (!spellInfo)
     {
         PSendSysMessage(LANG_COMMAND_NOSPELLFOUND);
@@ -4006,7 +4006,7 @@ bool ChatHandler::HandleCastSelfCommand(const char *args)
     if (!spell)
         return false;
 
-    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
+    SpellInfo const* spellInfo = sSpellStore.LookupEntry(spell);
     if (!spellInfo)
         return false;
 
@@ -4504,7 +4504,7 @@ bool ChatHandler::HandleFreezeCommand(const char *args)
         }
 
         //m_session->GetPlayer()->CastSpell(player, spellID, false);
-        if (SpellEntry const *spellInfo = sSpellStore.LookupEntry(9454))
+        if (SpellInfo const *spellInfo = sSpellStore.LookupEntry(9454))
             Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, player, player);
 
         //save player

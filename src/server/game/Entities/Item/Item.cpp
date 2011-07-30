@@ -28,6 +28,7 @@
 #include "SpellMgr.h"
 #include "ScriptMgr.h"
 #include "ConditionMgr.h"
+#include "SpellInfo.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -96,7 +97,7 @@ void AddItemsSetItem(Player* player, Item* item)
         {
             if (!eff->spells[y])                             // free slot
             {
-                SpellEntry const* spellInfo = sSpellStore.LookupEntry(set->spells[x]);
+                SpellInfo const* spellInfo = sSpellStore.LookupEntry(set->spells[x]);
                 if (!spellInfo)
                 {
                     sLog->outError("WORLD: unknown spell id %u in items set %u effects", set->spells[x], setid);
@@ -962,7 +963,7 @@ InventoryResult Item::CanBeMergedPartlyWith(ItemTemplate const* proto) const
     return EQUIP_ERR_OK;
 }
 
-bool Item::IsFitToSpellRequirements(SpellEntry const* spellInfo) const
+bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
 {
     ItemTemplate const* proto = GetTemplate();
 

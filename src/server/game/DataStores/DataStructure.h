@@ -1819,7 +1819,7 @@ struct SpellEntry
     uint32    AttributesEx4;                                // 5        m_attributesExD
     uint32    AttributesEx5;                                // 6        m_attributesExE
     uint32    AttributesEx6;                                // 7        m_attributesExF
-    uint32    AttributesEx7;                                // 8        m_attributesExG (0x20 - totems, 0x4 - paladin auras, etc...)
+    uint32    AttributesEx7;                                // 8        m_attributesExG
     // uint32 someFlags;                                    // 9        4.0.0
     // uint32 unk_400_1;                                    // 10       4.0.0
     // uint32 unk_420_1                                     // 11       4.2.0
@@ -1948,10 +1948,6 @@ struct SpellEntry
     //SpellReagentsEntry
     uint32 GetReagent(uint8 reagent) const;
     uint32 GetReagentCount(uint8 reagent) const; 
-
-    private:
-        // prevent creating custom entries (copy data from original in fact)
-        SpellEntry(SpellEntry const&);                      // DON'T must have implementation
 };
 
 typedef std::set<uint32> SpellCategorySet;
@@ -1982,9 +1978,9 @@ struct SpellFocusObjectEntry
 struct SpellRadiusEntry
 {
     uint32    ID;
-    float     radiusHostile;
+    float     radiusMin;
     //uint32    Unk    //always 0
-    float     radiusFriend;
+    float     radiusMax;
 };
 
 struct SpellRangeEntry
@@ -1993,7 +1989,7 @@ struct SpellRangeEntry
     float     minRangeHostile;
     float     minRangeFriend;
     float     maxRangeHostile;
-    float     maxRangeFriend;                               //friend means unattackable unit here
+    float     maxRangeFriend;
     uint32    type;
     //DBCString   Name;                                         // 6-21     m_displayName_lang
     //DBCString   ShortName;                                    // 23-38    m_displayNameShort_lang

@@ -52,7 +52,7 @@ public:
             ROG_SPELL_CHEAT_DEATH_COOLDOWN = 31231,
         };
 
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             return sSpellStore.LookupEntry(ROG_SPELL_CHEAT_DEATH_COOLDOWN);
         }
@@ -157,7 +157,7 @@ class spell_rog_preparation : public SpellScriptLoader
         class spell_rog_preparation_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_rog_preparation_SpellScript)
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(ROGUE_SPELL_GLYPH_OF_PREPARATION))
                     return false;
@@ -174,7 +174,7 @@ class spell_rog_preparation : public SpellScriptLoader
                 const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
                 for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                 {
-                    SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                    SpellInfo const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                     if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_ROGUE)
                     {
@@ -221,7 +221,7 @@ public:
     class spell_rog_prey_on_the_weak_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_rog_prey_on_the_weak_AuraScript)
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             if (!sSpellStore.LookupEntry(ROGUE_SPELL_PREY_ON_THE_WEAK))
                 return false;
@@ -264,7 +264,7 @@ class spell_rog_shiv : public SpellScriptLoader
         class spell_rog_shiv_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_rog_shiv_SpellScript)
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(ROGUE_SPELL_SHIV_TRIGGERED))
                     return false;
@@ -352,7 +352,7 @@ class spell_rog_deadly_poison : public SpellScriptLoader
                         if (enchant->type[s] != ITEM_ENCHANTMENT_TYPE_COMBAT_SPELL)
                             continue;
 
-                        SpellEntry const* spellInfo = sSpellStore.LookupEntry(enchant->spellid[s]);
+                        SpellInfo const* spellInfo = sSpellStore.LookupEntry(enchant->spellid[s]);
                         if (!spellInfo)
                         {
                             sLog->outError("Player::CastItemCombatSpell Enchant %i, cast unknown spell %i", enchant->ID, enchant->spellid[s]);

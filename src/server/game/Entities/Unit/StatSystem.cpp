@@ -1071,7 +1071,7 @@ bool Guardian::UpdateStats(Stats stat)
         aurEff = owner->GetAuraEffect(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, SPELLFAMILY_DEATHKNIGHT, 3010, 0);
         if (aurEff)
         {
-            SpellEntry const* sProto = aurEff->GetSpellProto();                                                 // Then get the SpellProto and add the dummy effect value
+            SpellInfo const* sProto = aurEff->GetSpellProto();                                                 // Then get the SpellProto and add the dummy effect value
             AddPctN(mod, SpellMgr::CalculateSpellEffectAmount(sProto, 1));                                      // Ravenous Dead edits the original scale
         }
         // Glyph of the Ghoul
@@ -1099,7 +1099,7 @@ bool Guardian::UpdateStats(Stats stat)
 
                 if (itr != ToPet()->m_spells.end())                                 // If pet has Wild Hunt
                 {
-                    SpellEntry const* sProto = sSpellStore.LookupEntry(itr->first); // Then get the SpellProto and add the dummy effect value
+                    SpellInfo const* sProto = sSpellStore.LookupEntry(itr->first); // Then get the SpellProto and add the dummy effect value
                     AddPctN(mod, SpellMgr::CalculateSpellEffectAmount(sProto, 0));
                 }
             }
@@ -1269,7 +1269,7 @@ void Guardian::UpdateAttackPowerAndDamage(bool ranged)
 
                 if (itr != ToPet()->m_spells.end())                                 // If pet has Wild Hunt
                 {
-                    SpellEntry const* sProto = sSpellStore.LookupEntry(itr->first); // Then get the SpellProto and add the dummy effect value
+                    SpellInfo const* sProto = sSpellStore.LookupEntry(itr->first); // Then get the SpellProto and add the dummy effect value
                     mod += CalculatePctN(1.0f, SpellMgr::CalculateSpellEffectAmount(sProto, 1));
                 }
             }

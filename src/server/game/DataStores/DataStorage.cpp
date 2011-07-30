@@ -161,7 +161,7 @@ DataStorage <SoundEntriesEntry> sSoundEntriesStore(SoundEntriesfmt);
 
 DataStorage <SpellItemEnchantmentEntry> sSpellItemEnchantmentStore(SpellItemEnchantmentfmt);
 DataStorage <SpellItemEnchantmentConditionEntry> sSpellItemEnchantmentConditionStore(SpellItemEnchantmentConditionfmt);
-DataStorage <SpellEntry> sSpellStore(SpellEntryfmt);
+DataStorage <SpellInfo> sSpellStore(SpellEntryfmt);
 SpellCategoryStore sSpellCategoryStore;
 PetFamilySpellsStore sPetFamilySpellsStore;
 
@@ -443,7 +443,7 @@ void LoadDataStorages(const std::string& dataPath)
     LoadData(availableDbcLocales, bad_dbc_files, sSpellStore,                  storagesPath, "Spell.dbc", &CustomSpellEntryfmt, &CustomSpellEntryIndex);
     for (uint32 i = 1; i < sSpellStore.GetNumRows(); ++i)
     {
-        SpellEntry const * spell = sSpellStore.LookupEntry(i);
+        SpellInfo const * spell = sSpellStore.LookupEntry(i);
         if (spell && spell->GetCategory())
             sSpellCategoryStore[spell->GetCategory()].insert(i);
     }
@@ -455,7 +455,7 @@ void LoadDataStorages(const std::string& dataPath)
         if (!skillLine)
             continue;
 
-        SpellEntry const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
+        SpellInfo const* spellInfo = sSpellStore.LookupEntry(skillLine->spellId);
 
         if (spellInfo && IsPassiveSpell(spellInfo->Id))
         {
@@ -608,7 +608,7 @@ void LoadDataStorages(const std::string& dataPath)
     {
         std::set<uint32> spellPaths;
         for (uint32 i = 1; i < sSpellStore.GetNumRows (); ++i)
-            if (SpellEntry const* sInfo = sSpellStore.LookupEntry (i))
+            if (SpellInfo const* sInfo = sSpellStore.LookupEntry (i))
                 for (int j = 0; j < MAX_SPELL_EFFECTS; ++j)
                     if (sInfo->GetSpellEffectIdByIndex(j) == SPELL_EFFECT_SEND_TAXI)
                         spellPaths.insert(sInfo->GetEffectMiscValue(j));
@@ -974,7 +974,6 @@ uint32 const* GetTalentTabPages(uint8 cls)
 
 // script support functions
  DataStorage <SoundEntriesEntry>  const* GetSoundEntriesStore()   { return &sSoundEntriesStore;   }
- DataStorage <SpellEntry>         const* GetSpellStore()          { return &sSpellStore;          }
  DataStorage <SpellRangeEntry>    const* GetSpellRangeStore()     { return &sSpellRangeStore;     }
  DataStorage <FactionEntry>       const* GetFactionStore()        { return &sFactionStore;        }
  DataStorage <CreatureDisplayInfoEntry> const* GetCreatureDisplayStore() { return &sCreatureDisplayInfoStore; }

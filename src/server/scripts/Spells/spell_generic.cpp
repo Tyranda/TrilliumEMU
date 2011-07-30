@@ -178,7 +178,7 @@ class spell_gen_parachute : public SpellScriptLoader
         {
             PrepareAuraScript(spell_gen_parachute_AuraScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_PARACHUTE))
                     return false;
@@ -321,7 +321,7 @@ class spell_gen_leeching_swarm : public SpellScriptLoader
         {
             PrepareAuraScript(spell_gen_leeching_swarm_AuraScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_LEECHING_SWARM_DMG))
                     return false;
@@ -379,7 +379,7 @@ class spell_gen_trick : public SpellScriptLoader
         class spell_gen_trick_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_gen_trick_SpellScript);
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_PIRATE_COSTUME_MALE))
                     return false;
@@ -464,7 +464,7 @@ class spell_gen_trick_or_treat : public SpellScriptLoader
         {
             PrepareSpellScript(spell_gen_trick_or_treat_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_TRICK))
                     return false;
@@ -539,7 +539,7 @@ class spell_pvp_trinket_wotf_shared_cd : public SpellScriptLoader
         {
             PrepareSpellScript(spell_pvp_trinket_wotf_shared_cd_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER))
                     return false;
@@ -553,7 +553,7 @@ class spell_pvp_trinket_wotf_shared_cd : public SpellScriptLoader
                 Player* caster = GetCaster()->ToPlayer();
                 if (!caster)
                     return;
-                SpellEntry const* spellInfo = GetSpellInfo();
+                SpellInfo const* spellInfo = GetSpellInfo();
 
                 caster->AddSpellCooldown(spellInfo->Id, 0, time(NULL) + GetSpellRecoveryTime(sSpellStore.LookupEntry(SPELL_WILL_OF_THE_FORSAKEN_COOLDOWN_TRIGGER)) / IN_MILLISECONDS);
                 WorldPacket data(SMSG_SPELL_COOLDOWN, 8+1+4);
@@ -591,7 +591,7 @@ class spell_gen_animal_blood : public SpellScriptLoader
         {
             PrepareAuraScript(spell_gen_animal_blood_AuraScript);
 
-            bool Validate(SpellEntry const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_SPAWN_BLOOD_POOL))
                     return false;
@@ -639,7 +639,7 @@ class spell_gen_divine_storm_cd_reset : public SpellScriptLoader
         {
             PrepareSpellScript(spell_gen_divine_storm_cd_reset_SpellScript);
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_DIVINE_STORM))
                     return false;
@@ -859,7 +859,7 @@ class spell_generic_clone_weapon : public SpellScriptLoader
         class spell_generic_clone_weapon_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_generic_clone_weapon_SpellScript);
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_COPY_WEAPON))
                     return false;
@@ -960,7 +960,7 @@ class spell_gen_seaforium_blast : public SpellScriptLoader
         {
             PrepareSpellScript(spell_gen_seaforium_blast_SpellScript);
 
-            bool Validate(SpellEntry const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_PLANT_CHARGES_CREDIT_ACHIEVEMENT))
                     return false;

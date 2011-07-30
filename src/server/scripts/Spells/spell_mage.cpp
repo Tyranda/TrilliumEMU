@@ -50,7 +50,7 @@ class spell_mage_blast_wave : public SpellScriptLoader
         class spell_mage_blast_wave_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_mage_blast_wave_SpellScript)
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_BLAST_WAVE))
                     return false;
@@ -94,7 +94,7 @@ class spell_mage_cold_snap : public SpellScriptLoader
                 const SpellCooldowns& cm = caster->ToPlayer()->GetSpellCooldownMap();
                 for (SpellCooldowns::const_iterator itr = cm.begin(); itr != cm.end();)
                 {
-                    SpellEntry const *spellInfo = sSpellStore.LookupEntry(itr->first);
+                    SpellInfo const *spellInfo = sSpellStore.LookupEntry(itr->first);
 
                     if (spellInfo->GetSpellFamilyName() == SPELLFAMILY_MAGE &&
                         (GetSpellSchoolMask(spellInfo) & SPELL_SCHOOL_MASK_FROST) &&
@@ -130,7 +130,7 @@ class spell_mage_polymorph_cast_visual : public SpellScriptLoader
             PrepareSpellScript(spell_mage_polymorph_cast_visual_SpellScript)
             static const uint32 spell_list[6];
 
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 // check if spell ids exist in dbc
                 for (int i = 0; i < 6; i++)
@@ -177,7 +177,7 @@ class spell_mage_summon_water_elemental : public SpellScriptLoader
         class spell_mage_summon_water_elemental_SpellScript : public SpellScript
         {
             PrepareSpellScript(spell_mage_summon_water_elemental_SpellScript)
-            bool Validate(SpellEntry const* /*spellEntry*/)
+            bool Validate(SpellInfo const* /*SpellInfo*/)
             {
                 if (!sSpellStore.LookupEntry(SPELL_MAGE_GLYPH_OF_ETERNAL_WATER))
                     return false;
@@ -229,7 +229,7 @@ public:
             SPELL_MAGE_FROST_WARDING_R1 = 28332,
         };
 
-        bool Validate(SpellEntry const* /*spellEntry*/)
+        bool Validate(SpellInfo const* /*SpellInfo*/)
         {
             return sSpellStore.LookupEntry(SPELL_MAGE_FROST_WARDING_TRIGGERED)
                 && sSpellStore.LookupEntry(SPELL_MAGE_FROST_WARDING_R1);
@@ -272,7 +272,7 @@ public:
         SPELL_MAGE_INCANTERS_ABSORBTION_R1 = 44394,
     };
 
-    bool Validate(SpellEntry const* /*spellEntry*/)
+    bool Validate(SpellInfo const* /*SpellInfo*/)
     {
         return sSpellStore.LookupEntry(SPELL_MAGE_INCANTERS_ABSORBTION_TRIGGERED)
             && sSpellStore.LookupEntry(SPELL_MAGE_INCANTERS_ABSORBTION_R1);
