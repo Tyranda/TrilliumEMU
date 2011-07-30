@@ -204,8 +204,6 @@ SpellCastingRequirementsInfo
 
 SpellCategoriesInfo
 
-SpellClassOptionsInfo
-
 SpellCooldownsInfo
 
 SpellEquippedItemsInfo
@@ -295,6 +293,7 @@ public:
     char* Rank[16];
     uint32 MaxTargetLevel;
     uint32 MaxAffectedTargets;
+    SpellClassOptionsEntry const* FamilyMask;
     uint32 SpellFamilyName;
     flag96 SpellFamilyFlags;
     uint32 DmgClass;
