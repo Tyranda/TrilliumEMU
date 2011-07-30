@@ -482,7 +482,7 @@ void SpellEffectInfo::InitRequiredTargetTypeData()
 bool SpellEffectInfo::Init = SpellEffectInfo::InitStaticData();
 SpellEffectTargetTypes SpellEffectInfo::RequiredTargetType[TOTAL_SPELL_EFFECTS];
 
-SpellInfo::SpellInfo(SpellEntry const* spellEntry)
+SpellInfo::SpellInfo(SpellEntry const* spellEntry, SpellClassOptionsEntry const* spellClass)
 {
     Id = spellEntry->Id;
     Category = spellEntry->Category;
@@ -557,8 +557,8 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
         Rank[i] = spellEntry->Rank[i];
     MaxTargetLevel = spellEntry->MaxTargetLevel;
     MaxAffectedTargets = spellEntry->MaxAffectedTargets;
-    SpellFamilyName = spellEntry->SpellFamilyName;
-    SpellFamilyFlags = spellEntry->SpellFamilyFlags;
+    SpellFamilyName = spellClass->SpellFamilyName ? sSpellClassOptionsStore.LookupEntry(spellClass->SpellFamilyName) : NULL;
+    SpellFamilyFlags = spellClass->SpellFamilyFlags ? sSpellClassOptionsStore.LookupEntry(spellClass->SpellFamilyFlags) : NULL;
     DmgClass = spellEntry->DmgClass;
     PreventionType = spellEntry->PreventionType;
     AreaGroupId  = spellEntry->AreaGroupId;

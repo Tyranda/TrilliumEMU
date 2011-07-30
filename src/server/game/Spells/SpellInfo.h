@@ -200,25 +200,25 @@ class SpellAuraRestrictionsInfo
 {
 };
 
-SpellCastingRequirementsInfo
-
-SpellCategoriesInfo
-
-SpellCooldownsInfo
-
-SpellEquippedItemsInfo
-
-SpellInterruptsInfo
-
-SpellLevelsInfo
-
-SpellPowerInfo
-
-SpellReagentsInfo
-
-SpellTargetRestrictionsInfo
-
-SpellTotemsInfo
+//SpellCastingRequirementsInfo
+//
+//SpellCategoriesInfo
+//
+//SpellCooldownsInfo
+//
+//SpellEquippedItemsInfo
+//
+//SpellInterruptsInfo
+//
+//SpellLevelsInfo
+//
+//SpellPowerInfo
+//
+//SpellReagentsInfo
+//
+//SpellTargetRestrictionsInfo
+//
+//SpellTotemsInfo
 
 class SpellClassInfo
 {
@@ -293,9 +293,7 @@ public:
     char* Rank[16];
     uint32 MaxTargetLevel;
     uint32 MaxAffectedTargets;
-    SpellClassOptionsEntry const* FamilyMask;
-    uint32 SpellFamilyName;
-    flag96 SpellFamilyFlags;
+    SpellClassOptionsEntry const* SpellFamilyName, SpellFamilyFlags;
     uint32 DmgClass;
     uint32 PreventionType;
     int32  AreaGroupId;
@@ -303,7 +301,7 @@ public:
     SpellEffectInfo Effects[MAX_SPELL_EFFECTS];
     SpellChainNode const* ChainEntry;
 
-    SpellInfo(SpellEntry const* spellEntry);
+    SpellInfo(SpellEntry const* spellEntry, SpellClassOptionsEntry const* spellClass);
 
     bool HasEffect(SpellEffects effect) const;
     bool HasAura(AuraType aura) const;

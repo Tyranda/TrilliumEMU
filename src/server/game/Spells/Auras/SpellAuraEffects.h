@@ -315,12 +315,12 @@ namespace Trillium
                 SpellInfo const* spellProtoB = aurEffB->GetSpellInfo();
 
                 // Wards
-                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
-                    (spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
+                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_MAGE) ||
+                    (spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK))
                     if (spellProtoA->GetCategory() == 56)
                         return true;
-                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_MAGE) ||
-                    (spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK))
+                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_MAGE) ||
+                    (spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK))
                     if (spellProtoB->GetCategory() == 56)
                         return false;
 
@@ -349,10 +349,10 @@ namespace Trillium
                     return false;
 
                 // Sacrifice
-                if ((spellProtoA->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoA->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
                     (spellProtoA->SpellIconID == 693))
                     return true;
-                if ((spellProtoB->GetSpellFamilyName() == SPELLFAMILY_WARLOCK) &&
+                if ((spellProtoB->SpellFamilyName == SPELLFAMILY_WARLOCK) &&
                     (spellProtoB->SpellIconID == 693))
                     return false;
 
