@@ -55,11 +55,11 @@ public:
         PrepareSpellScript(spell_hun_chimera_shot_SpellScript)
         bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_SERPENT))
                 return false;
-            if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_VIPER))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_VIPER))
                 return false;
-            if (!sSpellStore.LookupEntry(HUNTER_SPELL_CHIMERA_SHOT_SCORPID))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_CHIMERA_SHOT_SCORPID))
                 return false;
             return true;
         }
@@ -81,7 +81,7 @@ public:
                     continue;
 
                 // Search only Serpent Sting, Viper Sting, Scorpid Sting auras
-                flag96 familyFlag = aura->GetSpellInfo()->GetSpellClassOptions()->SpellFamilyFlags;
+                flag96 familyFlag = aura->GetSpellInfo()->SpellFamilyFlags;
                 if (!(familyFlag[1] & 0x00000080 || familyFlag[0] & 0x0000C000))
                     continue;
                 if (AuraEffect const* aurEff = aura->GetEffect(0))
@@ -151,7 +151,7 @@ public:
         PrepareSpellScript(spell_hun_invigoration_SpellScript)
         bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(HUNTER_SPELL_INVIGORATION_TRIGGERED))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_INVIGORATION_TRIGGERED))
                 return false;
             return true;
         }
@@ -186,7 +186,7 @@ public:
         PrepareSpellScript(spell_hun_last_stand_pet_SpellScript)
         bool Validate(SpellInfo const* /*SpellInfo*/)
         {
-            if (!sSpellStore.LookupEntry(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_PET_SPELL_LAST_STAND_TRIGGERED))
                 return false;
             return true;
         }
@@ -219,13 +219,13 @@ public:
     class spell_hun_masters_call_SpellScript : public SpellScript
     {
         PrepareSpellScript(spell_hun_masters_call_SpellScript)
-        bool Validate(SpellInfo const* SpellInfo)
+        bool Validate(SpellInfo const* spellEntry)
         {
-            if (!sSpellStore.LookupEntry(HUNTER_SPELL_MASTERS_CALL_TRIGGERED))
+            if (!sSpellMgr->GetSpellInfo(HUNTER_SPELL_MASTERS_CALL_TRIGGERED))
                 return false;
-            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(SpellInfo, EFFECT_0)))
+            if (!sSpellMgr->GetSpellInfo(spellEntry->Effects[EFFECT_0].CalcValue()))
                 return false;
-            if (!sSpellStore.LookupEntry(SpellMgr::CalculateSpellEffectAmount(SpellInfo, EFFECT_1)))
+            if (!sSpellMgr->GetSpellInfo(spellEntry->Effects[EFFECT_1].CalcValue()))
                 return false;
             return true;
         }
